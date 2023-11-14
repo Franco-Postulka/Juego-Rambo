@@ -8,37 +8,9 @@ from Class_Personaje import Personaje
 from Modo import *
 from Class_enemigo import Enemigo
 from Class_bala import Bala
+from Class_bomba import Bomba
 from Class_plataforma import Plataforma
-
-# def crear_plataforma(visible, tamaño,  x,  y, path=""):
-#     plataforma = {}
-#     if visible:
-#         plataforma["superficie"] = py.image.load(path)
-#         plataforma["superficie"] = py.transform.scale(plataforma["superficie"], tamaño)
-#     else:
-#         plataforma["superficie"] = py.Surface(tamaño)
-
-#     plataforma["rectangulo"] = plataforma["superficie"].get_rect()
-#     plataforma["rectangulo"].x = x
-#     plataforma["rectangulo"].y = y
-#     return plataforma
-# def crear_plataforma(visible, tamaño, x, y, path=""):
-#     plataforma = {}
-#     if visible:
-#         if path:
-#             plataforma["superficie"] = py.image.load(path)
-#             plataforma["superficie"] = py.transform.scale(plataforma["superficie"], tamaño)
-#             PANTALLA.blit(plataforma["superficie"], (x, y))  # Blitear la imagen
-#         else:
-#             plataforma["superficie"] = py.Surface(tamaño)
-#     else:
-#         plataforma["superficie"] = py.Surface(tamaño)
-
-#     plataforma["rectangulo"] = plataforma["superficie"].get_rect()
-#     plataforma["rectangulo"].x = x
-#     plataforma["rectangulo"].y = y
-#     return plataforma
-
+import random
 
 #ANCHO W - ALTO H
 W,H = 1200, 680
@@ -86,7 +58,7 @@ lista_enemigos = [un_enemigo]
 
 diccionario_animaciones_bala = {"derecha": bala_derecha , "izquierda": bala_izquierda}
 # bala = Bala(diccionario_animaciones_bala,rambo)
-
+diccionario_animaciones_bomba = {"inicial": bomba, "explosion" : bomba_explosion}
 
 #Personaje
 x_inicial = W//2 - 400
@@ -99,9 +71,12 @@ que_hace = "Quieto"
 
 disparo = False
 tiempo_ultimo_disparo = time.time()  # Inicializa el tiempo del último disparo
+tiempo_ultimo_bomba = time.time()
 intervalo_disparo = 1  # Establece el intervalo de tiempo entre disparos en segundos
 lista_balas_enemigo = []
 lista_balas_heroe = []
+lista_bombas = []
+intervalo_bomba = 2
 flag = True
 while flag:
     RELOJ.tick(FPS)
@@ -127,6 +102,16 @@ while flag:
     PANTALLA.blit(fondo,(0,0))
     teclas = py.key.get_pressed()
 
+    tiempo_actual_bomba = time.time()
+    tiempo_transcurrido_bomba = tiempo_actual_bomba - tiempo_ultimo_bomba
+
+    if tiempo_transcurrido_bomba >= intervalo_bomba:
+        posicion_x = random.randrange(0, W)
+        posicion_y = random.randrange(-100, -40)
+        bomba = Bomba(diccionario_animaciones_bomba, posicion_x, posicion_y)
+        lista_bombas.append(bomba)
+        tiempo_ultimo_bomba = tiempo_actual_bomba
+
     if teclas[py.K_d]:
         rambo.que_hace = "Derecha"
     elif teclas[py.K_a]:
@@ -140,6 +125,26 @@ while flag:
         plataforma.blit(PANTALLA)
     rambo.actualizar(PANTALLA, plataformas)
     un_enemigo.actualizar(PANTALLA,rambo)
+    for i in range(len(lista_bombas)):
+        # print(lista_bombas[i].rectangulo_principal.y)
+        lista_bombas[i].actualizar(PANTALLA)
+    
+    for i in range(len(lista_bombas)):
+        # print(lista_bombas[i].rectangulo_principal.y)
+        if lista_bombas[i].rectangulo_principal.y >= H:
+            del lista_bombas[i]
+            break
+    
+    for i in range(len(lista_bombas)):
+        if lista_bombas[i].rectangulo_principal.colliderect(rambo.rectangulo_principal):
+            lista_bombas[i].velocidad_animacion = 0.05
+            lista_bombas[i].animacion_actual = diccionario_animaciones_bomba["explosion"]
+            lista_bombas[i].actualizar(PANTALLA)
+            del lista_bombas[i]
+            rambo.vida -= 30
+            print(rambo.vida)
+            break
+    
 
     if disparo == True:
         for i in range(len(lista_balas_heroe)):
@@ -155,6 +160,7 @@ while flag:
                     break
         for i in range(len(lista_balas_heroe)):
             lista_balas_heroe[i].actualizar(PANTALLA)
+
         for i in range(len(lista_enemigos)):
             if lista_enemigos[i].vida <=0:
                 lista_enemigos[i].velocidad_animacion = 0.10
@@ -183,7 +189,7 @@ while flag:
         if lista_balas_enemigo[i].rectangulo_principal.colliderect(rambo.rectangulo_principal):
             del lista_balas_enemigo[i]
             rambo.vida -= 10
-            print(rambo.vida)
+            # print(rambo.vida)
             break
     for i in range(len(lista_balas_enemigo)):
         lista_balas_enemigo[i].actualizar(PANTALLA)

@@ -22,7 +22,7 @@ class Bala:
             self.direccion_x = -100
             self.rectangulo_principal.x -= 25
             self.animacion_actual = self.animaciones["izquierda"]
-        return self.rectangulo_principal.x
+        # return self.rectangulo_principal.x
         
     def animar(self, pantalla):
         largo = len(self.animacion_actual)

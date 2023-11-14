@@ -61,3 +61,11 @@ enemigo_muerte = [py.image.load(r"recursos_rambo\explosion1.png"),
 bala = [py.image.load(r"recursos_rambo\bala.png")]
 bala_derecha = [py.image.load(r"recursos_rambo\bala.png")]
 bala_izquierda = rotar_imagen(bala_derecha)
+
+bomba = [py.image.load(r"recursos_rambo\bomba2.png")]
+bomba_explosion = [py.image.load(r"recursos_rambo\explosion1.png"),
+                    py.image.load(r"recursos_rambo\explosion2.png"),
+                    py.image.load(r"recursos_rambo\explosion3.png"),
+                    py.image.load(r"recursos_rambo\explosion4.png"),
+                    py.image.load(r"recursos_rambo\explosion5.png"),]
+
