@@ -1,4 +1,5 @@
 import pygame as py 
+
 class Plataforma():
     def __init__(self, visible, tamaño, x, y, path="",posicion_imagen = (0,0)):
         self.visible = visible

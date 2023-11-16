@@ -15,7 +15,6 @@ def rotar_imagen(imagenes:list):
     return lista_imagenes
 
 
-
 personaje_quieto = [py.image.load(r"recursos_rambo\rambo_quieto.png")]
 personaje_mirando_derecha = [py.image.load(r"recursos_rambo\rambo_quieto.png")]
 personaje_mirando_izquierda = rotar_imagen(personaje_quieto)
@@ -62,7 +61,7 @@ bala = [py.image.load(r"recursos_rambo\bala.png")]
 bala_derecha = [py.image.load(r"recursos_rambo\bala.png")]
 bala_izquierda = rotar_imagen(bala_derecha)
 
-bomba = [py.image.load(r"recursos_rambo\bomba2.png")]
+bomba = [py.image.load(r"recursos_rambo\bomba.png")]
 bomba_explosion = [py.image.load(r"recursos_rambo\explosion1.png"),
                     py.image.load(r"recursos_rambo\explosion2.png"),
                     py.image.load(r"recursos_rambo\explosion3.png"),
