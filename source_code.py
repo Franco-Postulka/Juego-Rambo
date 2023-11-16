@@ -10,6 +10,7 @@ from Class_enemigo import Enemigo
 from Class_bala import Bala
 from Class_bomba import Bomba
 from Class_plataforma import Plataforma
+from Class_item import Item
 import random
 
 #ANCHO W - ALTO H
@@ -22,7 +23,7 @@ PANTALLA = py.display.set_mode((W,H)) # En pixeles
 py.display.set_caption("Juego Mario")
 
 #FONDO
-fondo = py.image.load(r"recursos_rambo\Background4.jpg").convert()
+fondo = py.image.load(r"recursos_rambo\background5.jpeg").convert()
 fondo = py.transform.scale(fondo, (W,H))
 
 contador_pasos = 0
@@ -40,10 +41,19 @@ diccionario["Salta_derecha"] = personaje_salta_derecha
 rambo = Personaje(diccionario,(120,150),600,500,10)
 reescalar_imagenes(diccionario, 120,150)
 
-############## PLatafromas 
-piso = Plataforma(False, (W, 125), 0, H-60)
-plataforma_roca_grande = Plataforma(False, (200, 20), 140, H-160)
-plataforma_roca_chica = Plataforma(False, (35, 20), 850, H-165)
+diccionario_puertas = {}
+diccionario_puertas["quieto"] = puerta
+reescalar_imagenes(diccionario_puertas, 140,150)
+
+############## Item ###################
+diccionario_llaves = {}
+diccionario_llaves["inicial"] = llave
+llave = Item(diccionario_llaves,150,H-450)
+
+############## PLatafromas ################
+piso = Plataforma(False, (W, 135), 0, H-70)
+plataforma_roca_grande = Plataforma(False, (200, 20), 140, H-170)
+plataforma_roca_chica = Plataforma(False, (35, 20), 850, H-175)
 plataforma_roca_flotante = Plataforma(True, (250, 10), 380, H-280, r"recursos_rambo\roca_chica_flotante.png",(350, H-300))
 plataforma_roca_flotante2 = Plataforma(True, (250, 10), 730, H-380, r"recursos_rambo\roca.png",(700, H-400))
 plataforma_roca_flotante3 = Plataforma(True, (180, 10), 45, H-380, r"recursos_rambo\roca2.png",(25, H-400))
@@ -53,11 +63,9 @@ plataformas = [piso, plataforma_roca_grande, plataforma_roca_chica, plataforma_r
 diccionario_animaciones_enemigo = {"izquierda": enemigo_camina_izquierda,"derecha":enemigo_camina_derecha,"muerte":enemigo_muerte}#, "quieto": enemigo_quieto_izquierda}
 un_enemigo = Enemigo(diccionario_animaciones_enemigo, 100)
 lista_enemigos = [un_enemigo]
-# d = {"aplasta": diccionario_animaciones_enemigo["aplasta"]}
-# reescalar_imagenes(d,100,150)adddddddddddd
+
 
 diccionario_animaciones_bala = {"derecha": bala_derecha , "izquierda": bala_izquierda}
-# bala = Bala(diccionario_animaciones_bala,rambo)
 diccionario_animaciones_bomba = {"inicial": bomba, "explosion" : bomba_explosion}
 
 #Personaje
@@ -123,14 +131,19 @@ while flag:
 
     for plataforma in plataformas:
         plataforma.blit(PANTALLA)
+
+    for i in range(len(diccionario_puertas)):
+        PANTALLA.blit(diccionario_puertas["quieto"][i],(1050,H-220))
+
+
     rambo.actualizar(PANTALLA, plataformas)
     un_enemigo.actualizar(PANTALLA,rambo)
+    llave.actualizar(PANTALLA)
+
     for i in range(len(lista_bombas)):
-        # print(lista_bombas[i].rectangulo_principal.y)
         lista_bombas[i].actualizar(PANTALLA)
-    
+
     for i in range(len(lista_bombas)):
-        # print(lista_bombas[i].rectangulo_principal.y)
         if lista_bombas[i].rectangulo_principal.y >= H:
             del lista_bombas[i]
             break
@@ -142,7 +155,6 @@ while flag:
             lista_bombas[i].actualizar(PANTALLA)
             del lista_bombas[i]
             rambo.vida -= 30
-            print(rambo.vida)
             break
     
 

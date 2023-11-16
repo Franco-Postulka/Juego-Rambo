@@ -22,7 +22,7 @@ class Bomba:
 
         if self.pasos >= largo:
             self.pasos = 0
-        pantalla.blit(self.animacion_actual[self.pasos],self.rectangulo_principal )
+        pantalla.blit(self.animacion_actual[self.pasos],self.rectangulo_principal)
         self.pasos +=  self.velocidad_animacion
 
     

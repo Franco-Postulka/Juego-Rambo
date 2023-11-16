@@ -69,3 +69,7 @@ bomba_explosion = [py.image.load(r"recursos_rambo\explosion1.png"),
                     py.image.load(r"recursos_rambo\explosion4.png"),
                     py.image.load(r"recursos_rambo\explosion5.png"),]
 
+puerta = [py.image.load("recursos_rambo\puerta.png")]
+
+llave = [py.image.load(r"recursos_rambo\llave.png")]
+
