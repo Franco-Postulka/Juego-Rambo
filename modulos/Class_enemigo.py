@@ -35,3 +35,19 @@ class Enemigo(Personaje):
         if self.esta_muerto == False:
             self.animar(pantalla)
             self.avanzar(pantalla,personaje)
+
+    def verificar_muerte(lista_enemigos,diccionario_animaciones_enemigo,screen,rambo,lista_balas_heroe):
+        for j in range(len(lista_enemigos)):
+            if lista_enemigos[j].vida <=0:
+                lista_enemigos[j].velocidad_animacion = 0.10
+                lista_enemigos[j].animacion_actual = diccionario_animaciones_enemigo["muerte"]
+                lista_enemigos[j].actualizar(screen,rambo)
+                lista_enemigos[j].esta_muerto = True
+                del lista_enemigos[j]
+                break
+            for i in range(len(lista_balas_heroe)):
+                if lista_balas_heroe[i].rectangulo_principal.colliderect(lista_enemigos[j].rectangulo_principal):
+                    del lista_balas_heroe[j]
+                    lista_enemigos[j].vida -= 10
+                    break
+

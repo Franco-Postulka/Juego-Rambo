@@ -1,5 +1,6 @@
 from modulos.Configuraciones import *
 from modulos.Class_personaje import Personaje
+from modulos.Class_proyectil import Bala
 
 class Heroe(Personaje):
     def __init__(self, animaciones, vida, velocidad_animacion, tamaño, pos_x, pos_y, velocidad):
@@ -72,4 +73,27 @@ class Heroe(Personaje):
         if not tocando_plataforma:
             self.esta_saltando = True
     
-    
+    def disparar(self,diccionario_animaciones_bala,direccion_x,lista_balas_heroe):
+        abscisa = self.rectangulo_principal.x
+        ordenada = self.rectangulo_principal.y + 50
+        bala = Bala(diccionario_animaciones_bala,direccion_x,abscisa,ordenada)
+        if bala.direccion_x >= abscisa:
+            bala.rectangulo_principal.x += 120 
+        lista_balas_heroe.append(bala)
+
+    def colisionar_bombas(self,lista_bombas,diccionario_animaciones_bomba,screen):
+        for i in range(len(lista_bombas)):
+            if lista_bombas[i].rectangulo_principal.colliderect(self.rectangulo_principal):
+                lista_bombas[i].velocidad_animacion = 0.05
+                lista_bombas[i].animacion_actual = diccionario_animaciones_bomba["explosion"]
+                lista_bombas[i].actualizar(screen)
+                del lista_bombas[i]
+                self.vida -= 30
+                break
+
+    def colisionar_balas(self,lista_balas_enemigo):
+        for i in range(len(lista_balas_enemigo)):
+            if lista_balas_enemigo[i].rectangulo_principal.colliderect(self.rectangulo_principal):
+                del lista_balas_enemigo[i]
+                self.vida -= 10
+                break

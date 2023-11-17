@@ -14,6 +14,8 @@ def rotar_imagen(imagenes:list):
     
     return lista_imagenes
 
+fondo = "recursos_rambo\Background.jpeg"
+
 
 personaje_quieto = [py.image.load(r"recursos_rambo\rambo_quieto.png")]
 personaje_mirando_derecha = [py.image.load(r"recursos_rambo\rambo_quieto.png")]
@@ -40,12 +42,6 @@ enemigo_camina = [py.image.load(r"recursos_rambo\terrorista_corriendo1.png"),
                 py.image.load(r"recursos_rambo\terrorista_corriendo4.png"),
                 py.image.load(r"recursos_rambo\terrorista_corriendo5.png"),
                 py.image.load(r"recursos_rambo\terrorista_corriendo6.png"),]
-# enemigo_camina = [py.image.load(r"recursos_rambo\ninja1.png"),
-#                 py.image.load(r"recursos_rambo\ninja2.png"),
-#                 py.image.load(r"recursos_rambo\ninja3.png"),
-#                 py.image.load(r"recursos_rambo\ninja4.png"),
-#                 py.image.load(r"recursos_rambo\ninja5.png"),
-#                 py.image.load(r"recursos_rambo\ninja6.png"),]
 
 enemigo_camina_derecha = enemigo_camina 
 enemigo_camina_izquierda = rotar_imagen(enemigo_camina) 
