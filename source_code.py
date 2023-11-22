@@ -36,7 +36,7 @@ diccionario_rambo["Salta"] = personaje_salta
 diccionario_rambo["Salta_izquierda"] = personaje_salta_izquiera
 diccionario_rambo["Salta_derecha"] = personaje_salta_derecha
 rambo = Heroe(diccionario_rambo,100,0.5,(120,150),600,500,10)
-reescalar_imagenes(diccionario_rambo, 120,150)
+# reescalar_imagenes(diccionario_rambo, 120,150)
 
 diccionario_puertas = {}
 diccionario_puertas["quieto"] = puerta

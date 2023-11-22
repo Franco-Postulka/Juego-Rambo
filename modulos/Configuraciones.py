@@ -16,6 +16,9 @@ def rotar_imagen(imagenes:list):
 
 fondo = "recursos_rambo\Background.jpeg"
 
+plataforma_1 = r"recursos_rambo\roca_chica_flotante.png"
+plataforma_2 = r"recursos_rambo\roca.png"
+plataforma_3 = r"recursos_rambo\roca2.png"
 
 personaje_quieto = [py.image.load(r"recursos_rambo\rambo_quieto.png")]
 personaje_mirando_derecha = [py.image.load(r"recursos_rambo\rambo_quieto.png")]

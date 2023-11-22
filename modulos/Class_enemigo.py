@@ -36,18 +36,32 @@ class Enemigo(Personaje):
             self.animar(pantalla)
             self.avanzar(pantalla,personaje)
 
-    def verificar_muerte(lista_enemigos,diccionario_animaciones_enemigo,screen,rambo,lista_balas_heroe):
-        for j in range(len(lista_enemigos)):
-            if lista_enemigos[j].vida <=0:
-                lista_enemigos[j].velocidad_animacion = 0.10
-                lista_enemigos[j].animacion_actual = diccionario_animaciones_enemigo["muerte"]
-                lista_enemigos[j].actualizar(screen,rambo)
-                lista_enemigos[j].esta_muerto = True
-                del lista_enemigos[j]
+    # def verificar_muerte(lista_enemigos,diccionario_animaciones_enemigo,screen,rambo,lista_balas_heroe):
+    #     for j in range(len(lista_enemigos)):
+    #         if lista_enemigos[j].vida <=0:
+    #             lista_enemigos[j].velocidad_animacion = 0.10
+    #             lista_enemigos[j].animacion_actual = diccionario_animaciones_enemigo["muerte"]
+    #             lista_enemigos[j].actualizar(screen,rambo)
+    #             lista_enemigos[j].esta_muerto = True
+    #             del lista_enemigos[j]
+    #             break
+    #         for i in range(len(lista_balas_heroe)):
+    #             if lista_balas_heroe[i].rectangulo_principal.colliderect(lista_enemigos[j].rectangulo_principal):
+    #                 del lista_balas_heroe[j]
+    #                 lista_enemigos[j].vida -= 10
+    #                 break
+
+    def verificar_muerte(self,diccionario_animaciones_enemigo,screen,rambo,lista_balas_heroe):
+        if self.vida <=0:
+            self.velocidad_animacion = 0.10
+            self.animacion_actual = diccionario_animaciones_enemigo["muerte"]
+            self.actualizar(screen,rambo)
+            self.esta_muerto = True
+            # del self
+            self.esta_muerto = True
+        for i in range(len(lista_balas_heroe)):
+            if lista_balas_heroe[i].rectangulo_principal.colliderect(self.rectangulo_principal):
+                del lista_balas_heroe[i]
+                self.vida -= 10
                 break
-            for i in range(len(lista_balas_heroe)):
-                if lista_balas_heroe[i].rectangulo_principal.colliderect(lista_enemigos[j].rectangulo_principal):
-                    del lista_balas_heroe[j]
-                    lista_enemigos[j].vida -= 10
-                    break
 

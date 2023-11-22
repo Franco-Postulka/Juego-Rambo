@@ -1,7 +1,5 @@
 from modulos.Configuraciones import *
 from modulos.Class_objeto import Objeto
-import time
-import random
 
 class Proyectil(Objeto):
     def __init__(self, animaciones, posicion_x_inicial, posicion_y_inicial) -> None:
@@ -60,15 +58,3 @@ class Bomba(Proyectil):
             if lista_bombas[i].rectangulo_principal.y >= H:
                 del lista_bombas[i]
                 break
-
-    # @staticmethod
-    # def crear_y_appendear_bombas(W,intervalo_bomba,diccionario_animaciones_bomba,lista_bombas):
-    #     tiempo_actual_bomba = time.time()
-    #     tiempo_transcurrido_bomba = tiempo_actual_bomba - Game.tiempo_ultimo_bomba
-    #     if tiempo_transcurrido_bomba >= intervalo_bomba:
-    #         posicion_x = random.randrange(0, W)
-    #         posicion_y = random.randrange(-100, -40)
-    #         bomba = Bomba(diccionario_animaciones_bomba, posicion_x, posicion_y)
-    #         lista_bombas.append(bomba)
-    #         Game.tiempo_ultimo_bomba = tiempo_actual_bomba
-            
