@@ -2,13 +2,13 @@ import pygame as py
 from pygame.locals import *
 from os import system
 system("cls")
-from modulos.Configuraciones import *
-from modulos.Class_heroe import Heroe
-from modulos.Class_enemigo import Enemigo
-from modulos.Class_proyectil import*
-from modulos.Class_plataforma import Plataforma
-from modulos.Class_item import Item
-from Modo import *
+from modulos.Imagenes import *
+from modulos.Elementos.Class_heroe import Heroe
+from modulos.Elementos.Class_enemigo import Enemigo
+from modulos.Elementos.Class_proyectil import*
+from modulos.Elementos.Class_plataforma import Plataforma
+from modulos.Elementos.Class_item import Item
+from modulos.Modo import *
 import time
 import random
 

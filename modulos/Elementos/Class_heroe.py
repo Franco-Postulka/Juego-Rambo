@@ -1,12 +1,25 @@
-from modulos.Configuraciones import *
-from modulos.Class_personaje import Personaje
-from modulos.Class_proyectil import Bala
+from modulos.Imagenes import *
+from modulos.Elementos.Class_personaje import Personaje
+from modulos.Elementos.Class_proyectil import Bala
+from modulos.Elementos.Class_puerta import Puerta
+import pygame
+
 
 class Heroe(Personaje):
     def __init__(self, animaciones, vida, velocidad_animacion, tamaño, pos_x, pos_y, velocidad):
         super().__init__(animaciones, vida, velocidad_animacion, tamaño, pos_x, pos_y, velocidad)
+        self.tamaño =  tamaño
         self.que_hace = "inicial"
         self.contador_pasos = 0
+        self.new_width = self.tamaño[0] // 2
+        self.new_height = self.tamaño[1] // 2
+
+        # Calcular las coordenadas para centrar el nuevo rectángulo en el centro del rectángulo original
+        self.new_x = self.rectangulo_principal.x + self.new_width // 2
+        self.new_y = self.rectangulo_principal.y + self.new_height // 2
+
+        # Crear el nuevo rectángulo más pequeño y centrado
+        self.smaller_rect = pygame.Rect(self.new_x, self.new_y, self.new_width, self.new_height)
 
         self.desplazamiento_y = 0
         self.potencia_salto = -25
@@ -53,12 +66,14 @@ class Heroe(Personaje):
         nueva_x = self.rectangulo_principal.x + velocidad_actual
         if nueva_x >= 0 and nueva_x <= pantalla.get_width() - self.rectangulo_principal.width:
             self.rectangulo_principal.x += velocidad_actual
+            self.smaller_rect.x+= velocidad_actual
     
     def aplicar_gravedad(self, pantalla, plataformas):
         tocando_plataforma = False
         if self.esta_saltando:
             self.animar(pantalla)
             self.rectangulo_principal.y += self.desplazamiento_y
+            self.smaller_rect.y += self.desplazamiento_y
             if self.desplazamiento_y + self.gravedad < self.limite_velocidad_salto:
                 self.desplazamiento_y += self.gravedad
             
@@ -68,6 +83,8 @@ class Heroe(Personaje):
                     self.desplazamiento_y = 0
                     self.esta_saltando = False
                     self.rectangulo_principal.bottom = plataforma.rect.top
+                    self.smaller_rect.y = self.rectangulo_principal.y + self.new_height // 2
+
                     tocando_plataforma = True  
                     break
         if not tocando_plataforma:
@@ -97,3 +114,15 @@ class Heroe(Personaje):
                 del lista_balas_enemigo[i]
                 self.vida -= 10
                 break
+
+    def agarrar_elementos(self, lista_items,puerta):
+        if len(lista_items) > 0:
+            for i in range(len(lista_items)):
+                if lista_items[i].rectangulo_principal.colliderect(self.smaller_rect):
+                    del lista_items[i]
+                    self.vida -= 10
+                    break
+        else:
+            puerta.animacion_actual = puerta.animaciones["abierta"]  
+            puerta.animacion_actual = puerta.animaciones["final"]
+

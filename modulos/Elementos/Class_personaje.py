@@ -1,5 +1,5 @@
-from modulos.Configuraciones import *
-from modulos.Class_objeto import Objeto
+from modulos.Imagenes import *
+from modulos.Elementos.Class_objeto import Objeto
 
 class Personaje(Objeto):
     def __init__(self, animaciones, vida, velocidad_animacion, tamaño, pos_x, pos_y, velocidad):

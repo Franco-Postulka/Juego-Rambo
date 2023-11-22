@@ -1,5 +1,5 @@
-from modulos.Configuraciones import *
-from modulos.Class_objeto import Objeto
+from modulos.Imagenes import *
+from modulos.Elementos.Class_objeto import Objeto
 
 class Proyectil(Objeto):
     def __init__(self, animaciones, posicion_x_inicial, posicion_y_inicial) -> None:

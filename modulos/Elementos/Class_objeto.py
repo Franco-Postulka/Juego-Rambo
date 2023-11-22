@@ -1,4 +1,4 @@
-from modulos.Configuraciones import *
+from modulos.Imagenes import *
 
 class Objeto:
     def __init__(self, animaciones, x, y) -> None:

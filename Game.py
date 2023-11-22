@@ -2,17 +2,18 @@ import pygame as py
 from pygame.locals import *
 from os import system
 system("cls")
-from modulos.Configuraciones import *
-from modulos.Class_heroe import Heroe
-from modulos.Class_enemigo import Enemigo
-from modulos.Class_proyectil import*
-from modulos.Class_plataforma import Plataforma
-from modulos.Class_item import Item
-from Modo import *
+from modulos.Imagenes import *
+from modulos.Elementos.Class_heroe import Heroe
+from modulos.Elementos.Class_enemigo import Enemigo
+from modulos.Elementos.Class_proyectil import*
+from modulos.Elementos.Class_plataforma import Plataforma
+from modulos.Elementos.Class_item import Item
+from modulos.Elementos.Class_puerta import Puerta
+from modulos.Modo import*
+from modulos.animaciones import*
 import time
 import random
 from config import Config
-from animaciones import*
 
 from config import Config
 import pygame as py
@@ -36,6 +37,8 @@ class Game(Config):
         self.set_heroe()
         self.set_enemigo()
         self.set_plataformas()
+        self.set_item()
+        self.set_puerta()
         self.disparo = False
         self.running = True
 
@@ -48,9 +51,15 @@ class Game(Config):
         plataforma_roca_flotante3 = Plataforma(True, (180, 10), 45, H-380, plataforma_3,(25, H-400))
         self.plataformas = [piso, plataforma_roca_grande, plataforma_roca_chica, plataforma_roca_flotante,plataforma_roca_flotante2,plataforma_roca_flotante3]
 
-    # def set_item(self):
-    #     reescalar_imagenes(diccionario_rambo, 120,150)
-    #     self.heroe = Heroe(diccionario_rambo,100,0.5,(120,150),600,500,10)
+    def set_item(self):
+        reescalar_imagenes(diccionario_llaves, 30,30)
+        llave = Item(diccionario_llaves,150,self.y -460)
+        self.lista_llave = [llave]
+    
+    def set_puerta(self):
+        reescalar_imagenes(diccionario_puertas, 160,195)
+        puerta = Puerta(diccionario_puertas,1050,self.y-265)
+        self.puerta = puerta
 
     def set_enemigo(self):
         self.enemigo =  Enemigo(diccionario_animaciones_enemigo,100,0.35,(120,150),900,470,5)
@@ -88,7 +97,7 @@ class Game(Config):
             self.lista_bombas.append(bomba)
             self.tiempo_ultimo_bomba = tiempo_actual_bomba
 
-    def crear_bals_enemigo(self):
+    def crear_bala_enemigo(self):
         if self.enemigo.esta_muerto == False and self.enemigo.zona_tiro == True:
                 tiempo_actual = time.time()
                 tiempo_transcurrido = tiempo_actual - self.tiempo_ultimo_disparo
@@ -98,6 +107,7 @@ class Game(Config):
                             bala.rectangulo_principal.x += 120
                     self.lista_balas_enemigo.append(bala)
                     self.tiempo_ultimo_disparo = tiempo_actual
+
     def manejar_eventos(self):
         for event in py.event.get():
                 if event.type == QUIT:
@@ -108,7 +118,7 @@ class Game(Config):
                 elif event.type == KEYDOWN:
                     if event.key == K_TAB:
                         cambiar_modo()
-        pass
+
     def actualizar_elementos(self):
         for plataforma in self.plataformas:
                 plataforma.blit(self.screen)
@@ -121,13 +131,16 @@ class Game(Config):
             Bala.actualizar_balas(self.lista_balas_heroe,self.screen,self.x)
             Enemigo.verificar_muerte(self.enemigo,diccionario_animaciones_enemigo,self.screen,self.heroe,self.lista_balas_heroe)
         
-        self.crear_bals_enemigo()
+        self.crear_bala_enemigo()
         Bala.actualizar_balas(self.lista_balas_enemigo,self.screen,self.x)
         self.heroe.colisionar_balas(self.lista_balas_enemigo)
+        Item.actualizar_items(self.lista_llave,self.screen)
+        self.heroe.agarrar_elementos(self.lista_llave,self.puerta)
             
     def dibujar_rectangulos(self):
         if obtener_modo():
             py.draw.rect(self.screen, "blue", self.heroe.rectangulo_principal,3)
+            py.draw.rect(self.screen, "blue", self.heroe.smaller_rect,3)
 
             py.draw.rect(self.screen, "red", self.enemigo.rectangulo_principal,3)
 
@@ -144,12 +157,10 @@ class Game(Config):
             self.fill_screen()
             self.crear_bomba()
             ###parte a agregarle funcioonalidad
-            for i in range(len(diccionario_puertas)):
-                self.screen.blit(diccionario_puertas["quieto"][i],(1050,self.y-220))
-            llave.animar(self.screen)
-
+            # for i in range(len(diccionario_puertas)):
+            #     self.screen.blit(diccionario_puertas["quieto"][i],(1050,self.y-220))
+            self.puerta.animar(self.screen)
             self.actualizar_elementos()
-            
             self.dibujar_rectangulos()
             py.display.update()
             py.display.flip()

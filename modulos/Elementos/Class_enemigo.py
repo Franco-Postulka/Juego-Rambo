@@ -1,5 +1,5 @@
-from modulos.Configuraciones import *
-from modulos.Class_personaje import Personaje
+from modulos.Imagenes import *
+from modulos.Elementos.Class_personaje import Personaje
 
 class Enemigo(Personaje):
     def __init__(self, animaciones, vida, velocidad_animacion,tamaño,pos_x,pos_y,velocidad):

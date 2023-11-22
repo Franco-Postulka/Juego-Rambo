@@ -67,7 +67,13 @@ bomba_explosion = [py.image.load(r"recursos_rambo\explosion1.png"),
                     py.image.load(r"recursos_rambo\explosion4.png"),
                     py.image.load(r"recursos_rambo\explosion5.png"),]
 
-puerta = [py.image.load("recursos_rambo\puerta.png")]
+puerta = [py.image.load(r"recursos_rambo\puerta.png")]
+puerta_abre =  [py.image.load(r"recursos_rambo\puerta.png"),
+                py.image.load(r"recursos_rambo\puerta2.png"),
+                py.image.load(r"recursos_rambo\puerta3.png"),
+                py.image.load(r"recursos_rambo\puerta4.png")]
+puerta_abierta = [py.image.load(r"recursos_rambo\puerta4.png")]
+
 
 llave = [py.image.load(r"recursos_rambo\llave.png")]
 
