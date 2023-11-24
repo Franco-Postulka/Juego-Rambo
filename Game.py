@@ -3,6 +3,7 @@ from pygame.locals import *
 from os import system
 system("cls")
 from modulos.Imagenes import *
+from modulos.sonidos import* 
 from modulos.Elementos.Class_heroe import Heroe
 from modulos.Elementos.Class_enemigo import Enemigo
 from modulos.Elementos.Class_proyectil import*
@@ -66,7 +67,15 @@ class Game(Config):
 
     def set_heroe(self):
         reescalar_imagenes(diccionario_rambo, 120,150)
-        self.heroe = Heroe(diccionario_rambo,100,0.5,(120,150),600,500,10)
+        self.heroe = Heroe(diccionario_rambo,5,0.5,(120,150),300,500,10)
+    
+    def bajar_vida(self):
+        if self.heroe.vida > 0 :
+            barra = py.transform.scale(barra_vida[self.heroe.vida -1], (200,60))
+            self.screen.blit(barra,(20,20))
+
+
+
 
     def move_heroe(self):
         teclas = py.key.get_pressed()
@@ -106,6 +115,7 @@ class Game(Config):
                     if bala.direccion_x >= self.enemigo.rectangulo_principal.x:
                             bala.rectangulo_principal.x += 120
                     self.lista_balas_enemigo.append(bala)
+                    sonido_disparo_enemigo.play()
                     self.tiempo_ultimo_disparo = tiempo_actual
 
     def manejar_eventos(self):
@@ -122,6 +132,7 @@ class Game(Config):
     def actualizar_elementos(self):
         for plataforma in self.plataformas:
                 plataforma.blit(self.screen)
+        self.bajar_vida()
         self.heroe.actualizar(self.screen, self.plataformas)
         self.enemigo.actualizar(self.screen,self.heroe)
         Bomba.actualizar_bomba(self.lista_bombas,self.screen,self.y)
@@ -135,7 +146,7 @@ class Game(Config):
         Bala.actualizar_balas(self.lista_balas_enemigo,self.screen,self.x)
         self.heroe.colisionar_balas(self.lista_balas_enemigo)
         Item.actualizar_items(self.lista_llave,self.screen)
-        self.heroe.agarrar_elementos(self.lista_llave,self.puerta)
+        self.heroe.agarrar_elementos(self.lista_llave,self.puerta,self.enemigo)
             
     def dibujar_rectangulos(self):
         if obtener_modo():
@@ -156,13 +167,9 @@ class Game(Config):
             self.move_heroe()
             self.fill_screen()
             self.crear_bomba()
-            ###parte a agregarle funcioonalidad
-            # for i in range(len(diccionario_puertas)):
-            #     self.screen.blit(diccionario_puertas["quieto"][i],(1050,self.y-220))
             self.puerta.animar(self.screen)
             self.actualizar_elementos()
             self.dibujar_rectangulos()
             py.display.update()
             py.display.flip()
-
         py.quit()

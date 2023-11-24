@@ -1,7 +1,7 @@
 from modulos.Imagenes import *
+from modulos.sonidos import* 
 from modulos.Elementos.Class_personaje import Personaje
 from modulos.Elementos.Class_proyectil import Bala
-from modulos.Elementos.Class_puerta import Puerta
 import pygame
 
 
@@ -53,6 +53,7 @@ class Heroe(Personaje):
             case "Salta":
                 if not self.esta_saltando:
                     self.esta_saltando = True
+                    sonido_salto.play()
                     self.desplazamiento_y = self.potencia_salto 
                     self.animacion_actual  = self.animaciones["Salta"]
                     self.animar(pantalla)
@@ -97,32 +98,36 @@ class Heroe(Personaje):
         if bala.direccion_x >= abscisa:
             bala.rectangulo_principal.x += 120 
         lista_balas_heroe.append(bala)
+        sonido_disparo.play()
 
     def colisionar_bombas(self,lista_bombas,diccionario_animaciones_bomba,screen):
         for i in range(len(lista_bombas)):
             if lista_bombas[i].rectangulo_principal.colliderect(self.rectangulo_principal):
+                sonido_recibo_disparo.play()
+                sonido_bomba.play()
                 lista_bombas[i].velocidad_animacion = 0.05
                 lista_bombas[i].animacion_actual = diccionario_animaciones_bomba["explosion"]
                 lista_bombas[i].actualizar(screen)
                 del lista_bombas[i]
-                self.vida -= 30
+                self.vida -= 2
                 break
 
     def colisionar_balas(self,lista_balas_enemigo):
         for i in range(len(lista_balas_enemigo)):
             if lista_balas_enemigo[i].rectangulo_principal.colliderect(self.rectangulo_principal):
+                sonido_recibo_disparo.play()
                 del lista_balas_enemigo[i]
-                self.vida -= 10
+                self.vida -= 1
                 break
 
-    def agarrar_elementos(self, lista_items,puerta):
+    def agarrar_elementos(self, lista_items,puerta,enemigo):
         if len(lista_items) > 0:
             for i in range(len(lista_items)):
                 if lista_items[i].rectangulo_principal.colliderect(self.smaller_rect):
+                    sonido_llave.play()
                     del lista_items[i]
-                    self.vida -= 10
                     break
-        else:
+        elif len(lista_items) == 0  and enemigo.esta_muerto == True:
             puerta.animacion_actual = puerta.animaciones["abierta"]  
             puerta.animacion_actual = puerta.animaciones["final"]
 

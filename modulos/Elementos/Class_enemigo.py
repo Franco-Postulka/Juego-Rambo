@@ -1,4 +1,5 @@
 from modulos.Imagenes import *
+from modulos.sonidos import*
 from modulos.Elementos.Class_personaje import Personaje
 
 class Enemigo(Personaje):
@@ -11,6 +12,8 @@ class Enemigo(Personaje):
 
     def avanzar(self,pantalla,personaje):
         if personaje.rectangulo_principal.bottom >= self.rectangulo_principal.y + 100:
+            if self.zona_tiro == False:
+                sonido_visto.play()
             self.zona_tiro = True
             if personaje.rectangulo_principal.x > self.rectangulo_principal.x :
                 self.velocidad_actual = self.velocidad *1
@@ -52,12 +55,12 @@ class Enemigo(Personaje):
     #                 break
 
     def verificar_muerte(self,diccionario_animaciones_enemigo,screen,rambo,lista_balas_heroe):
-        if self.vida <=0:
+        if self.vida <=0 and self.esta_muerto ==False:
+            sonido_bomba.play()
             self.velocidad_animacion = 0.10
             self.animacion_actual = diccionario_animaciones_enemigo["muerte"]
             self.actualizar(screen,rambo)
             self.esta_muerto = True
-            # del self
             self.esta_muerto = True
         for i in range(len(lista_balas_heroe)):
             if lista_balas_heroe[i].rectangulo_principal.colliderect(self.rectangulo_principal):
