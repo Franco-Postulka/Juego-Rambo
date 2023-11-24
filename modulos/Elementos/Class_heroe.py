@@ -47,8 +47,9 @@ class Heroe(Personaje):
                 self.caminar(pantalla)
 
             case "inicial":
-                self.animacion_actual  = self.animaciones["inicial"]
-                self.animar(pantalla)
+                if not self.esta_saltando:
+                    self.animacion_actual  = self.animaciones["inicial"]
+                    self.animar(pantalla)
 
             case "Salta":
                 if not self.esta_saltando:
@@ -72,6 +73,7 @@ class Heroe(Personaje):
     def aplicar_gravedad(self, pantalla, plataformas):
         tocando_plataforma = False
         if self.esta_saltando:
+            # self.animacion_actual  = self.animaciones["Salta"]
             self.animar(pantalla)
             self.rectangulo_principal.y += self.desplazamiento_y
             self.smaller_rect.y += self.desplazamiento_y

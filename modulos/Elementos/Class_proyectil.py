@@ -16,7 +16,7 @@ class Bala(Proyectil):
     def __init__(self, animaciones, direccion_x, posicion_x_inicial, posicion_y_inicial) -> None:
         super().__init__(animaciones, posicion_x_inicial, posicion_y_inicial)
         self.direccion_x = direccion_x
-        reescalar_imagenes(self.animaciones, 10,5)
+        reescalar_imagenes(self.animaciones, 12,7)
         # Otros atributos específicos de la Bala si los hay
 
     def mover(self, posicion_inicial_x):
@@ -46,6 +46,9 @@ class Bomba(Proyectil):
     def __init__(self, animaciones, posicion_x_inicial, posicion_y_inicial) -> None:
         super().__init__(animaciones, posicion_x_inicial, posicion_y_inicial)
         reescalar_imagenes(self.animaciones, 75,75)
+        self.rectangulo_principal = self.animaciones["inicial"][0].get_rect()
+        self.rectangulo_principal.x = posicion_x_inicial
+        self.rectangulo_principal.y = posicion_y_inicial
 
     def mover(self):
         self.rectangulo_principal.y += 10 

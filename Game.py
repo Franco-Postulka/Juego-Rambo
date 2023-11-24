@@ -44,12 +44,12 @@ class Game(Config):
         self.running = True
 
     def set_plataformas(self):
-        piso = Plataforma(False, (W, 135), 0, H-70)
-        plataforma_roca_grande = Plataforma(False, (200, 20), 140, H-170)
-        plataforma_roca_chica = Plataforma(False, (35, 20), 850, H-175)
-        plataforma_roca_flotante = Plataforma(True, (250, 10), 380, H-280, plataforma_1,(350, H-300))
-        plataforma_roca_flotante2 = Plataforma(True, (250, 10), 730, H-380, plataforma_2,(700, H-400))
-        plataforma_roca_flotante3 = Plataforma(True, (180, 10), 45, H-380, plataforma_3,(25, H-400))
+        piso = Plataforma(False, (self.x, 135), 0, self.y-70)
+        plataforma_roca_grande = Plataforma(False, (200, 20), 140,  self.y-170)
+        plataforma_roca_chica = Plataforma(False, (35, 20), 850,  self.y-175)
+        plataforma_roca_flotante = Plataforma(True, (250, 10), 380,  self.y-280, plataforma_1,(350,  self.y-300))
+        plataforma_roca_flotante2 = Plataforma(True, (250, 10), 730,  self.y-380, plataforma_2,(700,  self.y-400))
+        plataforma_roca_flotante3 = Plataforma(True, (180, 10), 45,  self.y-380, plataforma_3,(25,  self.y-400))
         self.plataformas = [piso, plataforma_roca_grande, plataforma_roca_chica, plataforma_roca_flotante,plataforma_roca_flotante2,plataforma_roca_flotante3]
 
     def set_item(self):
@@ -100,7 +100,7 @@ class Game(Config):
         tiempo_transcurrido_bomba = tiempo_actual_bomba - self.tiempo_ultimo_bomba
 
         if tiempo_transcurrido_bomba >= self.intervalo_bomba:
-            posicion_x = random.randrange(0, self.y)
+            posicion_x = random.randrange(0, self.x)
             posicion_y = random.randrange(-100, -40)
             bomba = Bomba(diccionario_animaciones_bomba, posicion_x, posicion_y)
             self.lista_bombas.append(bomba)
@@ -154,6 +154,9 @@ class Game(Config):
             py.draw.rect(self.screen, "blue", self.heroe.smaller_rect,3)
 
             py.draw.rect(self.screen, "red", self.enemigo.rectangulo_principal,3)
+
+            for bombas in self.lista_bombas:
+                py.draw.rect(self.screen, "red",bombas.rectangulo_principal,3)
 
             for plataforma in self.plataformas:
                 py.draw.rect(self.screen, "red", plataforma.rect, 3)
