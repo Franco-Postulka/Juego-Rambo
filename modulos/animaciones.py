@@ -1,8 +1,4 @@
 from modulos.Imagenes import *
-
-# W = 1200
-# H = 680
-
 diccionario_rambo = {}
 diccionario_rambo["inicial"] = personaje_quieto
 diccionario_rambo["Mirando_izquirda"] = personaje_mirando_izquierda
@@ -19,6 +15,9 @@ diccionario_puertas = {"inicial": puerta, "abierta": puerta_abre, "final": puert
 ############## Item ###################
 diccionario_llaves = {}
 diccionario_llaves["inicial"] = llave
+
+diccionario_monedas = {}
+diccionario_monedas["inicial"] = moneda
 
 diccionario_animaciones_enemigo = {"inicial": enemigo_camina_izquierda,"derecha":enemigo_camina_derecha,"muerte":enemigo_muerte}
 

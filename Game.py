@@ -38,8 +38,9 @@ class Game(Config):
         self.set_heroe()
         self.set_enemigo()
         self.set_plataformas()
-        self.set_item()
+        self.set_llave()
         self.set_puerta()
+        self.set_moneda()
         self.disparo = False
         self.running = True
 
@@ -52,10 +53,26 @@ class Game(Config):
         plataforma_roca_flotante3 = Plataforma(True, (180, 10), 45,  self.y-380, plataforma_3,(25,  self.y-400))
         self.plataformas = [piso, plataforma_roca_grande, plataforma_roca_chica, plataforma_roca_flotante,plataforma_roca_flotante2,plataforma_roca_flotante3]
 
-    def set_item(self):
+    def set_llave(self):
         reescalar_imagenes(diccionario_llaves, 30,30)
         llave = Item(diccionario_llaves,150,self.y -460)
         self.lista_llave = [llave]
+    
+    def set_moneda(self):
+        reescalar_imagenes(diccionario_monedas, 20,20)
+        moneda1 = Item(diccionario_monedas,20,self.y-150)
+        moneda2 = Item(diccionario_monedas,50,self.y-150)
+        moneda3 = Item(diccionario_monedas,80,self.y-150)
+        moneda4 = Item(diccionario_monedas,self.x-345,self.y-250)
+        moneda5 = Item(diccionario_monedas,self.x-580,self.y-400)
+        moneda6 = Item(diccionario_monedas,self.x-550,self.y-435)
+        moneda7 = Item(diccionario_monedas,self.x-520,self.y-470)
+        moneda8 = Item(diccionario_monedas,self.x-640,self.y-150)
+        moneda9 = Item(diccionario_monedas,self.x-670,self.y-150)
+        moneda10 = Item(diccionario_monedas,self.x-700,self.y-150)
+        moneda11 = Item(diccionario_monedas,self.x-730,self.y-150)
+        moneda12 = Item(diccionario_monedas,self.x-300,self.y-470)
+        self.lista_monedas = [moneda1,moneda2,moneda3,moneda4,moneda5,moneda6,moneda7,moneda8,moneda9,moneda10,moneda11,moneda12]
     
     def set_puerta(self):
         reescalar_imagenes(diccionario_puertas, 160,195)
@@ -134,9 +151,13 @@ class Game(Config):
                 plataforma.blit(self.screen)
         self.bajar_vida()
         self.heroe.actualizar(self.screen, self.plataformas)
-        self.enemigo.actualizar(self.screen,self.heroe)
+        Item.actualizar_items(self.lista_llave,self.screen)
+        Item.actualizar_items(self.lista_monedas,self.screen)
+        self.heroe.agarrar_llave(self.lista_llave,self.puerta,self.enemigo)
+        self.heroe.agarrar_monedas(self.lista_monedas)
         Bomba.actualizar_bomba(self.lista_bombas,self.screen,self.y)
         self.heroe.colisionar_bombas(self.lista_bombas,diccionario_animaciones_bomba,self.screen)
+        self.enemigo.actualizar(self.screen,self.heroe)
 
         if self.disparo == True:
             Bala.actualizar_balas(self.lista_balas_heroe,self.screen,self.x)
@@ -145,8 +166,6 @@ class Game(Config):
         self.crear_bala_enemigo()
         Bala.actualizar_balas(self.lista_balas_enemigo,self.screen,self.x)
         self.heroe.colisionar_balas(self.lista_balas_enemigo)
-        Item.actualizar_items(self.lista_llave,self.screen)
-        self.heroe.agarrar_elementos(self.lista_llave,self.puerta,self.enemigo)
             
     def dibujar_rectangulos(self):
         if obtener_modo():

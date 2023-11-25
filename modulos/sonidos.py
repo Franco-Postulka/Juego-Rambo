@@ -13,7 +13,11 @@ salto_filename = "jump.wav"
 caida_salto_filename = "land.wav"
 recibo_disparo_filename = "gunhit.wav"
 visto_filename = "visto.wav"
-llave_filename = "moneda.wav"
+llave_filename = "llave.wav"
+fondo_filename = "war_machines.wav"
+
+
+sonido_fondo = os.path.join(base_path,fondo_filename)
 
 # Cargar los sonidos usando las rutas completas
 sonido_disparo = py.mixer.Sound(os.path.join(base_path, disparo_filename))
@@ -39,6 +43,8 @@ sonido_visto.set_volume(0.5)
 sonido_llave = py.mixer.Sound(os.path.join(base_path, llave_filename))
 sonido_llave.set_volume(0.5)
 
+sonido_moneda = py.mixer.Sound(os.path.join(base_path, "moneda.wav"))
+sonido_moneda.set_volume(0.15)
 
 
 # py.mixer.init()

@@ -122,7 +122,7 @@ class Heroe(Personaje):
                 self.vida -= 1
                 break
 
-    def agarrar_elementos(self, lista_items,puerta,enemigo):
+    def agarrar_llave(self, lista_items,puerta,enemigo):
         if len(lista_items) > 0:
             for i in range(len(lista_items)):
                 if lista_items[i].rectangulo_principal.colliderect(self.smaller_rect):
@@ -132,4 +132,12 @@ class Heroe(Personaje):
         elif len(lista_items) == 0  and enemigo.esta_muerto == True:
             puerta.animacion_actual = puerta.animaciones["abierta"]  
             puerta.animacion_actual = puerta.animaciones["final"]
+
+    def agarrar_monedas(self, lista_items):
+        if len(lista_items) > 0:
+            for i in range(len(lista_items)):
+                if lista_items[i].rectangulo_principal.colliderect(self.smaller_rect):
+                    sonido_moneda.play()
+                    del lista_items[i]
+                    break
 
