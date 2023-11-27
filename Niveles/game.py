@@ -15,9 +15,12 @@ from modulos.animaciones import*
 import time
 import random
 from config import Config
-
 from config import Config
 import pygame as py
+import sqlite3
+
+py.init()
+py.font.init()
 
 class Game(Config):
     def __init__(self, size, FPS, caption="Title", icon=""):
@@ -43,6 +46,72 @@ class Game(Config):
         self.set_moneda()
         self.disparo = False
         self.running = True
+        self.score = 0
+        self.tiempo_finalizacion = None
+        self.font = self.font = py.font.SysFont("Roboto", 36)
+        self.tiempo_inicio = py.time.get_ticks()
+        self.tiempo_tardado = 0
+        self.tiempor_anterior = 0
+        self.tiempo_nivel = 60
+        # self.jugador = jugador
+
+    def bajar_timer(self):
+        self.tiempor_anterior = self.tiempo_inicio
+        self.tiempo_inicio = py.time.get_ticks()
+        self.tiempo_tardado += self.tiempo_inicio/1000 - self.tiempor_anterior/1000
+        self.tiempo_nivel -= self.tiempo_inicio/1000 - self.tiempor_anterior/1000
+        rendered_text = self.font.render(f"00: {round(self.tiempo_nivel)}", True, (255,255,255))
+        self.screen.blit(rendered_text, (self.x//2-40,20))
+        if self.tiempo_tardado >= 60:
+            self.running = False
+    
+    def actualizar_score(self):
+        self.score = self.heroe.score + self.enemigo.score
+        rendered_text = self.font.render(f"Score: {self.score}", True, (255,255,255))
+        self.screen.blit(rendered_text, (self.x-150,20))
+
+    def verificar_fin_juego(self):
+        if self.heroe.vida <= 0 :
+            self.running = False
+        elif self.puerta.animacion_actual == diccionario_puertas["final"] and self.puerta.rectangulo_principal.colliderect(self.heroe.smaller_rect):
+            if self.tiempo_finalizacion is None:
+                self.tiempo_finalizacion = time.time()
+            else:
+                # Si ya se estableció el tiempo, verifica si han pasado 2 segundos
+                tiempo_transcurrido = time.time() - self.tiempo_finalizacion
+                if tiempo_transcurrido >= 2:  # Cambia este valor por el tiempo deseado
+                    with sqlite3.connect("score.db") as conexion:
+                        try:
+                            cursor = conexion.cursor() #cursor es un objeto que permite ejecutar comandos SQL y manejar los resultados
+                            # Verificar si la tabla 'Jugadores' existe en sqlite_master
+                            cursor.execute('''SELECT name FROM sqlite_master WHERE type='table' AND name='Jugadores' ''')
+                            tabla_existe = cursor.fetchone() ## fetchone devuelve None si no enu¿cuentra la table 
+                            if tabla_existe:
+                                print("La tabla 'Jugadores' ya existe en la base de datos")
+                            else:
+                                # Si la tabla no existe, se crea
+                                sentencia = '''
+                                    create table Jugadores
+                                    (
+                                        id integer primary key autoincrement,
+                                        nombre text,
+                                        score integer
+                                    )
+                                    '''
+                                conexion.execute(sentencia)
+                                print("Tabla 'Jugadores' creada con éxito")
+                        except Exception as e:
+                            print("Error:", e)
+                        try:
+                            sentencia = '''
+                            insert into Jugadores(nombre,score) values (?,?)
+                            '''
+                            conexion.execute(sentencia,("Franco", self.score))
+                            print("tabla completada")
+                        except Exception as e:
+                            print("Error:", e)
+                    self.running = False
+
 
     def set_plataformas(self):
         piso = Plataforma(False, (self.x, 135), 0, self.y-70)
@@ -90,9 +159,6 @@ class Game(Config):
         if self.heroe.vida > 0 :
             barra = py.transform.scale(barra_vida[self.heroe.vida -1], (200,60))
             self.screen.blit(barra,(20,20))
-
-
-
 
     def move_heroe(self):
         teclas = py.key.get_pressed()
@@ -173,6 +239,7 @@ class Game(Config):
             py.draw.rect(self.screen, "blue", self.heroe.smaller_rect,3)
 
             py.draw.rect(self.screen, "red", self.enemigo.rectangulo_principal,3)
+            py.draw.rect(self.screen, "red", self.puerta.rectangulo_principal,3)
 
             for bombas in self.lista_bombas:
                 py.draw.rect(self.screen, "red",bombas.rectangulo_principal,3)
@@ -182,7 +249,6 @@ class Game(Config):
         pass
 
     def run(self):
-        py.init()
         while self.running:
             self.RELOJ.tick(self.FPS)
             self.manejar_eventos()
@@ -192,6 +258,9 @@ class Game(Config):
             self.puerta.animar(self.screen)
             self.actualizar_elementos()
             self.dibujar_rectangulos()
+            self.actualizar_score()
+            self.bajar_timer()
+            self.verificar_fin_juego()
             py.display.update()
             py.display.flip()
         py.quit()

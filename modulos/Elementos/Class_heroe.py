@@ -17,9 +17,8 @@ class Heroe(Personaje):
         # Calcular las coordenadas para centrar el nuevo rectángulo en el centro del rectángulo original
         self.new_x = self.rectangulo_principal.x + self.new_width // 2
         self.new_y = self.rectangulo_principal.y + self.new_height // 2
-
         # Crear el nuevo rectángulo más pequeño y centrado
-        self.smaller_rect = pygame.Rect(self.new_x, self.new_y, self.new_width, self.new_height)
+        self.smaller_rect = pygame.Rect(self.new_x, self.new_y, self.new_width, self.new_height) 
 
         self.desplazamiento_y = 0
         self.potencia_salto = -25
@@ -111,7 +110,7 @@ class Heroe(Personaje):
                 lista_bombas[i].animacion_actual = diccionario_animaciones_bomba["explosion"]
                 lista_bombas[i].actualizar(screen)
                 del lista_bombas[i]
-                self.vida -= 2
+                self.vida -= 1
                 break
 
     def colisionar_balas(self,lista_balas_enemigo):
@@ -137,6 +136,7 @@ class Heroe(Personaje):
         if len(lista_items) > 0:
             for i in range(len(lista_items)):
                 if lista_items[i].rectangulo_principal.colliderect(self.smaller_rect):
+                    self.score += 100
                     sonido_moneda.play()
                     del lista_items[i]
                     break

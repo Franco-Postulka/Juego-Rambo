@@ -12,4 +12,5 @@ class Personaje(Objeto):
         self.rectangulo_principal.x = pos_x
         self.rectangulo_principal.y = pos_y
         self.velocidad = velocidad
+        self.score = 0
         

@@ -61,6 +61,7 @@ class Enemigo(Personaje):
             self.animacion_actual = diccionario_animaciones_enemigo["muerte"]
             self.actualizar(screen,rambo)
             self.esta_muerto = True
+            self.score += 300
         for i in range(len(lista_balas_heroe)):
             if lista_balas_heroe[i].rectangulo_principal.colliderect(self.rectangulo_principal):
                 del lista_balas_heroe[i]
