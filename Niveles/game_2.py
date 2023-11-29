@@ -22,22 +22,22 @@ import sqlite3
 py.init()
 py.font.init()
 
-class Game(Config):
+class Game_2(Config):
     def __init__(self, size, FPS, caption="Title", icon=""):
         super().__init__(size, FPS, caption, icon)
         self.x = size[0]
         self.y = size[1]
         self.FPS = FPS
         self.RELOJ = py.time.Clock()
-        self.set_background_image(fondo)
+        self.set_background_image(fondo_level_2)
         self.screen = py.display.set_mode(self.size)
         self.lista_balas_heroe = []
         self.lista_balas_enemigo = []
         self.lista_bombas = []
         self.intervalo_bomba = 2
-        self.intervalo_disparo = 2
+        self.intervalo_apuñalada = 1.5
         self.tiempo_ultimo_bomba = 0
-        self.tiempo_ultimo_disparo = 0
+        self.tiempo_ultima_apuñalada = 0
         self.set_heroe()
         self.set_enemigo()
         self.set_plataformas()
@@ -116,13 +116,21 @@ class Game(Config):
                 print("Error:", e)
 
     def set_plataformas(self):
-        piso = Plataforma(False, (self.x, 135), 0, self.y-70)
-        plataforma_roca_grande = Plataforma(False, (200, 20), 140,  self.y-170)
-        plataforma_roca_chica = Plataforma(False, (35, 20), 850,  self.y-175)
-        plataforma_roca_flotante = Plataforma(True, (250, 10), 380,  self.y-280, plataforma_1,(350,  self.y-300))
-        plataforma_roca_flotante2 = Plataforma(True, (250, 10), 730,  self.y-380, plataforma_2,(700,  self.y-400))
-        plataforma_roca_flotante3 = Plataforma(True, (180, 10), 45,  self.y-380, plataforma_3,(25,  self.y-400))
-        self.plataformas = [piso, plataforma_roca_grande, plataforma_roca_chica, plataforma_roca_flotante,plataforma_roca_flotante2,plataforma_roca_flotante3]
+        piso = Plataforma(False, (self.x, 135), 0, self.y-65)
+        plataforma = Plataforma(True, (200, 10), 380,  self.y-260, plataforma_base,(350,  self.y-270))
+        otra_plataforma = Plataforma(True, (200, 10), 580,  self.y-260, plataforma_base,(550,  self.y-270))
+        otra_plataforma_2 = Plataforma(True, (230, 10), 780,  self.y-260, plataforma_base,(780,  self.y-270))
+
+        otra_plataforma_3 = Plataforma(True, (200, 10), 0,  self.y-440, plataforma_base,(-10,  self.y-450))
+        otra_plataforma_4 = Plataforma(True, (200, 10), 200,  self.y-440, plataforma_base,(150,  self.y-450))
+
+        plataforma_barril = Plataforma(True, (50, 10), 1100,  self.y-180, barril,(1070,  self.y-200))
+        plataforma_barri2 = Plataforma(True, (50, 10), 470,  self.y-370, barril,(440,  self.y-390))
+        self.plataformas = [plataforma_barril,plataforma_barri2, piso,plataforma,otra_plataforma,otra_plataforma_2,otra_plataforma_3,otra_plataforma_4]
+
+    def set_enemigo(self):
+        self.enemigo =  Enemigo(diccionario_animaciones_ninja,100,0.35,(120,150),900,self.y -410 , 7,340,self.x -200)
+        self.enemigo_2 =  Enemigo(diccionario_animaciones_ninja,100,0.35,(120,150),100,85,7,0,390)
 
     def set_llave(self):
         reescalar_imagenes(diccionario_llaves, 30,30)
@@ -150,8 +158,6 @@ class Game(Config):
         puerta = Puerta(diccionario_puertas,1050,self.y-265)
         self.puerta = puerta
 
-    def set_enemigo(self):
-        self.enemigo =  Enemigo(diccionario_animaciones_enemigo,100,0.35,(120,150),900,470,5,0,self.x)
 
     def set_heroe(self):
         reescalar_imagenes(diccionario_rambo, 120,150)
@@ -191,17 +197,20 @@ class Game(Config):
             self.lista_bombas.append(bomba)
             self.tiempo_ultimo_bomba = tiempo_actual_bomba
 
-    def crear_bala_enemigo(self):
-        if self.enemigo.esta_muerto == False and self.enemigo.zona_tiro == True:
+    def enemigo_apuñalar(self,enemigo):
+        if enemigo.esta_muerto == False and enemigo.rectangulo_principal.colliderect(self.heroe.smaller_rect):
             tiempo_actual = time.time()
-            tiempo_transcurrido = tiempo_actual - self.tiempo_ultimo_disparo
-            if tiempo_transcurrido >= self.intervalo_disparo:
-                bala = Bala(diccionario_animaciones_bala,self.heroe.rectangulo_principal.x,self.enemigo.rectangulo_principal.x,self.enemigo.rectangulo_principal.y + 50)
-                if bala.direccion_x >= self.enemigo.rectangulo_principal.x:
-                        bala.rectangulo_principal.x += 120
-                self.lista_balas_enemigo.append(bala)
-                sonido_disparo_enemigo.play()
-                self.tiempo_ultimo_disparo = tiempo_actual
+            tiempo_transcurrido = tiempo_actual - self.tiempo_ultima_apuñalada
+            if tiempo_transcurrido >= self.intervalo_apuñalada:
+                # bala = Bala(diccionario_animaciones_bala,self.heroe.rectangulo_principal.x,self.enemigo.rectangulo_principal.x,self.enemigo.rectangulo_principal.y + 50)
+                # if bala.direccion_x >= self.enemigo.rectangulo_principal.x:
+                #         bala.rectangulo_principal.x += 120
+                # self.lista_balas_enemigo.append(bala)
+                sonido_espada.play()
+                self.heroe.vida -= 1
+                self.tiempo_ultima_apuñalada = tiempo_actual
+        else:
+            pass
 
     def manejar_eventos(self):
         for event in py.event.get():
@@ -219,21 +228,23 @@ class Game(Config):
                 plataforma.blit(self.screen)
         self.bajar_vida()
         self.heroe.actualizar(self.screen, self.plataformas)
-        Item.actualizar_items(self.lista_llave,self.screen)
-        Item.actualizar_items(self.lista_monedas,self.screen)
-        self.heroe.agarrar_llave(self.lista_llave,self.puerta,self.enemigo)
-        self.heroe.agarrar_monedas(self.lista_monedas)
-        Bomba.actualizar_bomba(self.lista_bombas,self.screen,self.y)
+        # Item.actualizar_items(self.lista_llave,self.screen)
+        # Item.actualizar_items(self.lista_monedas,self.screen)
+        # self.heroe.agarrar_llave(self.lista_llave,self.puerta,self.enemigo)
+        # self.heroe.agarrar_monedas(self.lista_monedas)
+        # Bomba.actualizar_bomba(self.lista_bombas,self.screen,self.y)
         self.heroe.colisionar_bombas(self.lista_bombas,diccionario_animaciones_bomba,self.screen)
-        self.enemigo.actualizar(self.screen,self.heroe, sonido_visto)
+        self.enemigo.actualizar(self.screen,self.heroe)
+        self.enemigo_2.actualizar(self.screen,self.heroe)
 
         if self.disparo == True:
             Bala.actualizar_balas(self.lista_balas_heroe,self.screen,self.x)
-            Enemigo.verificar_muerte(self.enemigo,diccionario_animaciones_enemigo,self.screen,self.heroe,self.lista_balas_heroe)
-        
-        self.crear_bala_enemigo()
-        Bala.actualizar_balas(self.lista_balas_enemigo,self.screen,self.x)
-        self.heroe.colisionar_balas(self.lista_balas_enemigo)
+        Enemigo.verificar_muerte(self.enemigo,diccionario_animaciones_enemigo,self.screen,self.heroe,self.lista_balas_heroe)
+        Enemigo.verificar_muerte(self.enemigo_2,diccionario_animaciones_enemigo,self.screen,self.heroe,self.lista_balas_heroe)
+            
+        self.enemigo_apuñalar(self.enemigo)
+        self.enemigo_apuñalar(self.enemigo_2)
+        # self.heroe.colisionar_balas(self.lista_balas_enemigo)
             
     def dibujar_rectangulos(self):
         if obtener_modo():
@@ -241,7 +252,8 @@ class Game(Config):
             py.draw.rect(self.screen, "blue", self.heroe.smaller_rect,3)
 
             py.draw.rect(self.screen, "red", self.enemigo.rectangulo_principal,3)
-            py.draw.rect(self.screen, "red", self.puerta.rectangulo_principal,3)
+            py.draw.rect(self.screen, "red", self.enemigo_2.rectangulo_principal,3)
+            # py.draw.rect(self.screen, "red", self.puerta.rectangulo_principal,3)
 
             for bombas in self.lista_bombas:
                 py.draw.rect(self.screen, "red",bombas.rectangulo_principal,3)
@@ -256,12 +268,12 @@ class Game(Config):
             self.manejar_eventos()
             self.move_heroe()
             self.fill_screen()
-            self.crear_bomba()
-            self.puerta.animar(self.screen)
+            # self.crear_bomba()
+            # self.puerta.animar(self.screen)
             self.actualizar_elementos()
             self.dibujar_rectangulos()
             self.actualizar_score()
-            self.bajar_timer()
+            # self.bajar_timer()
             self.verificar_fin_juego()
             py.display.update()
             py.display.flip()

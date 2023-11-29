@@ -26,11 +26,19 @@ personaje_mirando_derecha = "rambo_quieto.png"
 
 
 fondo = os.path.join(base_path,fondo_filename)
+fondo_level_2 = os.path.join(base_path,"fondo_street_fighter.jpg")
+# fondo_level_2 = os.path.join(base_path,"fondo_chino_opaco.jpg")
+
+fondo_menu = os.path.join(base_path,"Inicio.jpg")
+letra = os.path.join("recursos_rambo","letra.ttf")
+rectangulo = os.path.join(base_path,"rectangulo.png")
 
 plataforma_1 = os.path.join(base_path,plataforma_1_filename)
 plataforma_2 = os.path.join(base_path,plataforma_2_filename)
 plataforma_3 = os.path.join(base_path,plataforma_3_filename)
 
+plataforma_base = os.path.join(base_path,"plataforma.png")
+barril = os.path.join(base_path,"barril.png")
 personaje_quieto = [py.image.load(os.path.join(base_path,personaje_quieto_filename))]
 personaje_mirando_derecha = [py.image.load(os.path.join(base_path,personaje_quieto_filename))]
 personaje_mirando_izquierda = rotar_imagen(personaje_quieto)
@@ -59,6 +67,16 @@ enemigo_camina = [py.image.load(os.path.join(base_path, "terrorista_corriendo1.p
 
 enemigo_camina_derecha = enemigo_camina 
 enemigo_camina_izquierda = rotar_imagen(enemigo_camina) 
+
+ninja_camina = [py.image.load(os.path.join(base_path, "ninja1.png")),
+                py.image.load(os.path.join(base_path, "ninja2.png")),
+                py.image.load(os.path.join(base_path, "ninja3.png")),
+                py.image.load(os.path.join(base_path, "ninja4.png")),
+                py.image.load(os.path.join(base_path, "ninja5.png")),
+                py.image.load(os.path.join(base_path, "ninja6.png")),]
+
+ninja_camina_derecha = ninja_camina 
+ninja_camina_izquierda = rotar_imagen(ninja_camina_derecha) 
 
 
 enemigo_muerte = [py.image.load(os.path.join(base_path, "explosion1.png")),

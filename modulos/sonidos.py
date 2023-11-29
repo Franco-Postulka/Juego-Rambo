@@ -18,6 +18,7 @@ fondo_filename = "war_machines.wav"
 
 
 sonido_fondo = os.path.join(base_path,fondo_filename)
+sonido_fondo_inicio = os.path.join(base_path,"badlands.wav")
 
 # Cargar los sonidos usando las rutas completas
 sonido_disparo = py.mixer.Sound(os.path.join(base_path, disparo_filename))
@@ -45,6 +46,9 @@ sonido_llave.set_volume(0.5)
 
 sonido_moneda = py.mixer.Sound(os.path.join(base_path, "moneda.wav"))
 sonido_moneda.set_volume(0.15)
+
+sonido_espada = py.mixer.Sound(os.path.join(base_path, "espada.wav"))
+sonido_espada.set_volume(0.5)
 
 
 # py.mixer.init()

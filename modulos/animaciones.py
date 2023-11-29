@@ -20,6 +20,8 @@ diccionario_monedas = {}
 diccionario_monedas["inicial"] = moneda
 
 diccionario_animaciones_enemigo = {"inicial": enemigo_camina_izquierda,"derecha":enemigo_camina_derecha,"muerte":enemigo_muerte}
+diccionario_animaciones_ninja = {"inicial": ninja_camina_izquierda,"derecha":ninja_camina_derecha,"muerte":enemigo_muerte}
+
 
 diccionario_animaciones_bala = { "inicial": bala_izquierda,"derecha": bala_derecha }
 diccionario_animaciones_bomba = {"inicial": bomba, "explosion" : bomba_explosion}
