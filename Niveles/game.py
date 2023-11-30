@@ -272,16 +272,29 @@ class Game(Config):
     def run(self):
         while self.running:
             self.RELOJ.tick(self.FPS)
+            
             self.manejar_eventos()
+            
             self.move_heroe()
+            
             self.fill_screen()
+            
             self.crear_bomba()
+            
             self.puerta.animar(self.screen)
+            
             self.actualizar_elementos()
+            
             self.dibujar_rectangulos()
+            
             self.actualizar_score()
+            
             self.bajar_timer()
+            
             self.verificar_fin_juego()
+            
             py.display.update()
+            
             py.display.flip()
+            
         py.quit()
