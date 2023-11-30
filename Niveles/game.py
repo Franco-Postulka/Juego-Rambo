@@ -18,6 +18,7 @@ from config import Config
 from config import Config
 import pygame as py
 import sqlite3
+from Niveles.game_2 import Game_2
 
 py.init()
 py.font.init()
@@ -53,6 +54,7 @@ class Game(Config):
         self.tiempo_tardado = 0
         self.tiempor_anterior = 0
         self.tiempo_nivel = 60
+        self.fin = True
         # self.jugador = jugador
 
     def bajar_timer(self):
@@ -72,7 +74,15 @@ class Game(Config):
 
     def verificar_fin_juego(self):
         if self.heroe.vida <= 0 :
-            self.running = False
+            # self.fin= True
+            # self.running = False
+            self.music.stop()
+            game = Game_2((1200, 680), 18)
+            game.set_caption('Nivel 2')
+            game.set_music(sonido_fondo_samurai)
+            game.set_volume(0.1)
+            game.play_music()
+            game.run()
         elif self.puerta.animacion_actual == diccionario_puertas["final"] and self.puerta.rectangulo_principal.colliderect(self.heroe.smaller_rect):
             if self.tiempo_finalizacion is None:
                 self.tiempo_finalizacion = time.time()
@@ -81,7 +91,15 @@ class Game(Config):
                 tiempo_transcurrido = time.time() - self.tiempo_finalizacion
                 if tiempo_transcurrido >= 2:  # Cambia este valor por el tiempo deseado
                     self.guardar_db("score.db")
-                    self.running = False
+                    self.music.stop()
+                    game = Game_2((1200, 680), 18)
+                    game.set_caption('Nivel 2')
+                    game.set_music(sonido_fondo_samurai)
+                    game.set_volume(0.1)
+                    game.play_music()
+                    game.run()
+                    # self.fin= True
+                    # self.running = False
 
     def guardar_db(self,path):
         with sqlite3.connect(path) as conexion:

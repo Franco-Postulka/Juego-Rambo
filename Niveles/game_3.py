@@ -6,6 +6,7 @@ from modulos.Imagenes import *
 from modulos.sonidos import* 
 from modulos.Elementos.Class_heroe import Heroe
 from modulos.Elementos.Class_enemigo import Jefe
+from modulos.Elementos.Class_enemigo import Enemigo
 from modulos.Elementos.Class_proyectil import*
 from modulos.Elementos.Class_plataforma import Plataforma
 from modulos.Elementos.Class_item import Item
@@ -33,8 +34,8 @@ class Game_3(Config):
         self.screen = py.display.set_mode(self.size)
         self.lista_balas_heroe = []
         self.lista_balas_enemigo = []
-        self.lista_shurikens = []
-        self.intervalo_shuriken = 1
+        self.lista_bolas_hielo = []
+        self.intervalo_bola_hielo = 2
         self.intervalo_disparo = 2
         self.tiempo_ultimo_bomba = 0
         self.tiempo_ultimo_disparo = 0
@@ -53,6 +54,7 @@ class Game_3(Config):
         self.tiempo_tardado = 0
         self.tiempor_anterior = 0
         self.tiempo_nivel = 60
+        self.fin = False
         # self.jugador = jugador
 
     def bajar_timer(self):
@@ -72,6 +74,7 @@ class Game_3(Config):
 
     def verificar_fin_juego(self):
         if self.heroe.vida <= 0 :
+            self.fin = True
             self.running = False
         elif self.puerta.animacion_actual == diccionario_puertas["final"] and self.puerta.rectangulo_principal.colliderect(self.heroe.smaller_rect):
             if self.tiempo_finalizacion is None:
@@ -81,6 +84,7 @@ class Game_3(Config):
                 tiempo_transcurrido = time.time() - self.tiempo_finalizacion
                 if tiempo_transcurrido >= 2:  # Cambia este valor por el tiempo deseado
                     self.guardar_db("score.db")
+                    self.fin = True
                     self.running = False
 
     def guardar_db(self,path):
@@ -117,21 +121,18 @@ class Game_3(Config):
 
     def set_plataformas(self):
         piso = Plataforma(False, (self.x, 135), 0, self.y-60)
-        plataforma = Plataforma(True, (200, 10), 380,  self.y-260, plataforma_base,(350,  self.y-270))
-        otra_plataforma = Plataforma(True, (200, 10), 580,  self.y-260, plataforma_base,(550,  self.y-270))
-        otra_plataforma_2 = Plataforma(True, (230, 10), 780,  self.y-260, plataforma_base,(780,  self.y-270))
-
-        otra_plataforma_3 = Plataforma(True, (200, 10), 0,  self.y-440, plataforma_base,(-10,  self.y-450))
-        otra_plataforma_4 = Plataforma(True, (200, 10), 200,  self.y-440, plataforma_base,(150,  self.y-450))
-
-        plataforma_barril = Plataforma(True, (50, 10), 190,  self.y-180, barril,(170,  self.y-200))
-        plataforma_barri2 = Plataforma(True, (50, 10), 470,  self.y-370, barril,(440,  self.y-390))
-        self.plataformas = [piso,plataforma_barril]
+        plataforma_chica = Plataforma(True, (50, 10), 70,  self.y-130, plataforma_hielo_chica,(60,  self.y-140))
+        otra_plataforma_chica = Plataforma(True, (50, 10), 570,  self.y-340, plataforma_hielo_chica,(560,  self.y-350))
+        plataforma = Plataforma(True, (260, 10), 250,  self.y-240, plataforma_hielo,(230,  self.y-250))
+        otra_plataforma = Plataforma(True, (260, 10), 750,  self.y-240, plataforma_hielo,(730,  self.y-250))
+        otra_plataforma_1 = Plataforma(True, (200, 10), 0,  self.y-440, plataforma_hielo,(-10,  self.y-450))
+        otra_plataforma_2 = Plataforma(True, (200, 10), 200,  self.y-440, plataforma_hielo,(150,  self.y-450))
+        self.plataformas = [piso,plataforma,plataforma_chica,otra_plataforma_chica,otra_plataforma,otra_plataforma_1,otra_plataforma_2]
 
     def set_enemigo(self):
         self.enemigo =  Jefe(diccionario_animaciones_mago,200,0.35,(120,150),900,self.y -210 , 5,0,self.x )
-        # self.enemigo_2 =  Enemigo(diccionario_animaciones_ninja,100,0.35,(120,150),100,85,7,0,390)
-        self.lista_enemigos = [self.enemigo]
+        self.enemigo_2 =  Enemigo(diccionario_animaciones_ninja,100,0.35,(120,150),100,85,7,0,390)
+        self.lista_enemigos = [self.enemigo,self.enemigo_2]
 
     def set_llave(self):
         reescalar_imagenes(diccionario_llaves, 30,30)
@@ -140,33 +141,33 @@ class Game_3(Config):
     
     def set_moneda(self):
         reescalar_imagenes(diccionario_monedas, 20,20)
-        moneda1 = Item(diccionario_monedas,750,self.y-150)
-        moneda2 = Item(diccionario_monedas,790,self.y-150)
-        moneda3 = Item(diccionario_monedas,830,self.y-150)
+        moneda1 = Item(diccionario_monedas,550,self.y-150)
+        moneda2 = Item(diccionario_monedas,590,self.y-150)
+        moneda3 = Item(diccionario_monedas,630,self.y-150)
+        moneda5 = Item(diccionario_monedas,670,self.y-150)
+        moneda6 = Item(diccionario_monedas,710,self.y-150)
 
         moneda4 = Item(diccionario_monedas,self.x-85,self.y-250)
 
-        moneda5 = Item(diccionario_monedas,250,self.y-150)
-        moneda6 = Item(diccionario_monedas,280,self.y-150)
         # moneda7 = Item(diccionario_monedas,self.x-520,self.y-150)
 
         moneda8 = Item(diccionario_monedas,self.x-800,self.y-350)
         moneda9 = Item(diccionario_monedas,self.x-830,self.y-350)
 
-        moneda10 = Item(diccionario_monedas,self.x-500,self.y-350)
-        moneda11 = Item(diccionario_monedas,self.x-530,self.y-350)
-        moneda12 = Item(diccionario_monedas,self.x-560,self.y-350)
+        moneda10 = Item(diccionario_monedas,self.x-300,self.y-350)
+        moneda11 = Item(diccionario_monedas,self.x-330,self.y-350)
+        moneda12 = Item(diccionario_monedas,self.x-360,self.y-350)
         self.lista_monedas = [moneda1,moneda2,moneda3,moneda4,moneda5,moneda6,moneda8,moneda9,moneda10,moneda11,moneda12]
     
     def set_puerta(self):
         reescalar_imagenes(diccionario_puertas, 160,195)
-        puerta = Puerta(diccionario_puertas,30,self.y-255)
+        puerta = Puerta(diccionario_puertas,self.x-150,self.y-255)
         self.puerta = puerta
 
 
     def set_heroe(self):
         reescalar_imagenes(diccionario_rambo, 120,150)
-        self.heroe = Heroe(diccionario_rambo,5,0.5,(120,150),300,500,10)
+        self.heroe = Heroe(diccionario_rambo,5,0.5,(120,150),200,500,10)
     
     def bajar_vida(self):
         if self.heroe.vida > 0 :
@@ -192,15 +193,15 @@ class Game_3(Config):
 
     
     def crear_bomba(self):
-        tiempo_actual_shuriken = py.time.get_ticks() / 1000  # Obtiene el tiempo actual en segundos
-        tiempo_transcurrido_shuriken = tiempo_actual_shuriken - self.tiempo_ultimo_bomba
+        tiempo_actual_bola_hielo = py.time.get_ticks() / 1000  # Obtiene el tiempo actual en segundos
+        tiempo_transcurrido_bola_hielo = tiempo_actual_bola_hielo - self.tiempo_ultimo_bomba
 
-        if tiempo_transcurrido_shuriken >= self.intervalo_shuriken:
+        if tiempo_transcurrido_bola_hielo >= self.intervalo_bola_hielo:
             posicion_x = random.randrange(0, self.x)
             posicion_y = random.randrange(-100, -40)
             bomba = Bomba(diccionario_animaciones_bomba_hielo, posicion_x, posicion_y,50,50)
-            self.lista_shurikens.append(bomba)
-            self.tiempo_ultimo_bomba = tiempo_actual_shuriken
+            self.lista_bolas_hielo.append(bomba)
+            self.tiempo_ultimo_bomba = tiempo_actual_bola_hielo
 
     def crear_bala_enemigo(self):
         if self.enemigo.esta_muerto == False and self.enemigo.zona_tiro == True:
@@ -213,6 +214,15 @@ class Game_3(Config):
                 self.lista_balas_enemigo.append(bala)
                 sonido_disparo_mago.play()
                 self.tiempo_ultimo_disparo = tiempo_actual
+
+    def enemigo_apuñalar(self,enemigo):
+        if enemigo.esta_muerto == False and enemigo.rectangulo_principal.colliderect(self.heroe.smaller_rect):
+            tiempo_actual = time.time()
+            tiempo_transcurrido = tiempo_actual - self.tiempo_ultima_apuñalada
+            if tiempo_transcurrido >= self.intervalo_apuñalada:
+                sonido_espada.play()
+                self.heroe.vida -= 1
+                self.tiempo_ultima_apuñalada = tiempo_actual
 
 
     def manejar_eventos(self):
@@ -231,24 +241,24 @@ class Game_3(Config):
                 plataforma.blit(self.screen)
         self.bajar_vida()
         self.heroe.actualizar(self.screen, self.plataformas)
-        # Item.actualizar_items(self.lista_llave,self.screen)
-        # Item.actualizar_items(self.lista_monedas,self.screen)
+        Item.actualizar_items(self.lista_llave,self.screen)
+        Item.actualizar_items(self.lista_monedas,self.screen)
         self.heroe.agarrar_llave(self.lista_llave,self.puerta,self.lista_enemigos)
-        # self.heroe.agarrar_monedas(self.lista_monedas)
-        Bomba.actualizar_bomba(self.lista_shurikens,self.screen,self.y)
-        self.heroe.colisionar_bombas(self.lista_shurikens,diccionario_animaciones_bomba_hielo,self.screen,sonido_colision_hielo)
+        self.heroe.agarrar_monedas(self.lista_monedas)
+        Bomba.actualizar_bomba(self.lista_bolas_hielo,self.screen,self.y)
+        self.heroe.colisionar_bombas(self.lista_bolas_hielo,diccionario_animaciones_bomba_hielo,self.screen,sonido_colision_hielo)
         self.enemigo.actualizar(self.screen,self.heroe)
-        # self.enemigo_2.actualizar(self.screen,self.heroe)
+        self.enemigo_2.actualizar(self.screen,self.heroe)
 
         if self.disparo == True:
             Bala.actualizar_balas(self.lista_balas_heroe,self.screen,self.x)
         Jefe.verificar_muerte(self.enemigo,diccionario_animaciones_enemigo,self.screen,self.heroe,self.lista_balas_heroe, self.lista_enemigos,sonido_colision_hielo)
-        # Enemigo.verificar_muerte(self.enemigo_2,diccionario_animaciones_enemigo,self.screen,self.heroe,self.lista_balas_heroe,self.lista_enemigos)
+        Enemigo.verificar_muerte(self.enemigo_2,diccionario_animaciones_enemigo,self.screen,self.heroe,self.lista_balas_heroe,self.lista_enemigos,sonido_bomba)
             
         self.crear_bala_enemigo()
         Bala.actualizar_balas(self.lista_balas_enemigo,self.screen,self.x)
-        self.heroe.colisionar_balas(self.lista_balas_enemigo, sonido_congelado)
-        # self.enemigo_apuñalar(self.enemigo_2)
+        self.heroe.colisionar_balas(self.lista_balas_enemigo, sonido_congelado,True)
+        self.enemigo_apuñalar(self.enemigo_2)
             
     def dibujar_rectangulos(self):
         if obtener_modo():
@@ -256,10 +266,10 @@ class Game_3(Config):
             py.draw.rect(self.screen, "blue", self.heroe.smaller_rect,3)
 
             py.draw.rect(self.screen, "red", self.enemigo.rectangulo_principal,3)
-            # py.draw.rect(self.screen, "red", self.enemigo_2.rectangulo_principal,3)
+            py.draw.rect(self.screen, "red", self.enemigo_2.rectangulo_principal,3)
             py.draw.rect(self.screen, "red", self.puerta.rectangulo_principal,3)
 
-            for bombas in self.lista_shurikens:
+            for bombas in self.lista_bolas_hielo:
                 py.draw.rect(self.screen, "red",bombas.rectangulo_principal,3)
 
             for plataforma in self.plataformas:
@@ -273,7 +283,7 @@ class Game_3(Config):
             self.move_heroe()
             self.fill_screen()
             self.crear_bomba()
-            # self.puerta.animar(self.screen)
+            self.puerta.animar(self.screen)
             self.actualizar_elementos()
             self.dibujar_rectangulos()
             self.actualizar_score()

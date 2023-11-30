@@ -39,6 +39,7 @@ plataforma_3 = os.path.join(base_path,plataforma_3_filename)
 
 plataforma_base = os.path.join(base_path,"plataforma.png")
 plataforma_hielo = os.path.join(base_path,"platafroma_hielo.png")
+plataforma_hielo_chica = os.path.join(base_path,"plataforma_hielo_chica.png")
 
 barril = os.path.join(base_path,"barril.png")
 personaje_quieto = [py.image.load(os.path.join(base_path,personaje_quieto_filename))]

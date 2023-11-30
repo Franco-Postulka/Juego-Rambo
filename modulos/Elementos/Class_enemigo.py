@@ -65,7 +65,7 @@ class Jefe(Enemigo):
         super().__init__(animaciones, vida, velocidad_animacion, tamaño, pos_x, pos_y, velocidad, top_izquierda, top_derecha)
 
     def avanzar_jefe(self, personaje, sonido=None):
-        if (personaje.rectangulo_principal.bottom >= self.rectangulo_principal.y + 100):
+        if (personaje.rectangulo_principal.bottom >= self.rectangulo_principal.y + 50):
             if self.zona_tiro == False:
                 if sonido != None: 
                     sonido.play()

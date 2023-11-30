@@ -2,6 +2,7 @@ import pygame, sys
 from boton import*
 from Niveles.game import Game
 from Niveles.game_2 import Game_2
+from Niveles.game_3 import Game_3
 from modulos.sonidos import*
 from modulos.Imagenes import*
 from pygame.locals import *
@@ -32,6 +33,17 @@ def play_level_2():
     game.set_volume(0.1)
     game.play_music()
     game.run()
+
+def play_level_3():
+    game = Game_3((1200, 680), 18)
+    game.set_caption('Nivel 2')
+    game.set_music(sonido_fondo_mago)
+    game.set_volume(0.1)
+    game.play_music()
+    game.run()
+    
+
+
 
 def main_menu():
     pygame.mixer.init()
@@ -72,7 +84,7 @@ def main_menu():
                     play_level_2()
                 if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                     background.stop()
-                    play_level_1()
+                    play_level_3()
 
         pygame.display.update()
 

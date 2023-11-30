@@ -119,13 +119,14 @@ class Heroe(Personaje):
                 self.vida -= 1
                 break
 
-    def colisionar_balas(self,lista_balas_enemigo, sonido_extra = None):
+    def colisionar_balas(self,lista_balas_enemigo, sonido_extra, congelamiento = False):
         for i in range(len(lista_balas_enemigo)):
             if lista_balas_enemigo[i].rectangulo_principal.colliderect(self.rectangulo_principal):
                 sonido_extra.play()
                 del lista_balas_enemigo[i]
                 self.vida -= 1
-                self.tiempo_inmovilizado = 18  # Establece el contador en 60 fotogramas (1 segundo a 60 FPS)
+                if congelamiento == True:
+                    self.tiempo_inmovilizado = 18  # Establece el contador en 60 fotogramas (1 segundo a 60 FPS)
                 break
 
     def agarrar_llave(self, lista_items,puerta,lista_enemigos):

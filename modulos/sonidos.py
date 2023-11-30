@@ -20,6 +20,7 @@ fondo_filename = "war_machines.wav"
 sonido_fondo = os.path.join(base_path,fondo_filename)
 sonido_fondo_inicio = os.path.join(base_path,"badlands.wav")
 sonido_fondo_samurai = os.path.join(base_path,"musica_samurai.wav")
+sonido_fondo_mago = os.path.join(base_path,"musica_mago.wav")
 
 # Cargar los sonidos usando las rutas completas
 sonido_disparo = py.mixer.Sound(os.path.join(base_path, disparo_filename))
