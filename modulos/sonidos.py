@@ -19,6 +19,7 @@ fondo_filename = "war_machines.wav"
 
 sonido_fondo = os.path.join(base_path,fondo_filename)
 sonido_fondo_inicio = os.path.join(base_path,"badlands.wav")
+sonido_fondo_samurai = os.path.join(base_path,"musica_samurai.wav")
 
 # Cargar los sonidos usando las rutas completas
 sonido_disparo = py.mixer.Sound(os.path.join(base_path, disparo_filename))
@@ -49,6 +50,19 @@ sonido_moneda.set_volume(0.15)
 
 sonido_espada = py.mixer.Sound(os.path.join(base_path, "espada.wav"))
 sonido_espada.set_volume(0.5)
+
+sonido_disparo_mago = py.mixer.Sound(os.path.join(base_path, "mago_dispara2.ogg"))
+sonido_disparo_mago.set_volume(0.5)
+
+sonido_congelado = py.mixer.Sound(os.path.join(base_path, "congelamiento.ogg"))
+sonido_congelado.set_volume(0.5)
+
+sonido_colision_hielo = py.mixer.Sound(os.path.join(base_path, "explosion_hielo.ogg"))
+sonido_congelado.set_volume(0.5)
+
+
+
+
 
 
 # py.mixer.init()

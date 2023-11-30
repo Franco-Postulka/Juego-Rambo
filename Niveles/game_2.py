@@ -33,8 +33,8 @@ class Game_2(Config):
         self.screen = py.display.set_mode(self.size)
         self.lista_balas_heroe = []
         self.lista_balas_enemigo = []
-        self.lista_bombas = []
-        self.intervalo_bomba = 2
+        self.lista_shurikens = []
+        self.intervalo_shuriken = 1
         self.intervalo_apuñalada = 1.5
         self.tiempo_ultimo_bomba = 0
         self.tiempo_ultima_apuñalada = 0
@@ -66,7 +66,7 @@ class Game_2(Config):
             self.running = False
     
     def actualizar_score(self):
-        self.score = self.heroe.score + self.enemigo.score
+        self.score = self.heroe.score + self.enemigo.score + self.enemigo_2.score
         rendered_text = self.font.render(f"Score: {self.score}", True, (255,255,255))
         self.screen.blit(rendered_text, (self.x-150,20))
 
@@ -131,31 +131,36 @@ class Game_2(Config):
     def set_enemigo(self):
         self.enemigo =  Enemigo(diccionario_animaciones_ninja,100,0.35,(120,150),900,self.y -410 , 7,340,self.x -200)
         self.enemigo_2 =  Enemigo(diccionario_animaciones_ninja,100,0.35,(120,150),100,85,7,0,390)
+        self.lista_enemigos = [self.enemigo,self.enemigo_2]
 
     def set_llave(self):
         reescalar_imagenes(diccionario_llaves, 30,30)
-        llave = Item(diccionario_llaves,150,self.y -460)
+        llave = Item(diccionario_llaves,80,self.y -520)
         self.lista_llave = [llave]
     
     def set_moneda(self):
         reescalar_imagenes(diccionario_monedas, 20,20)
-        moneda1 = Item(diccionario_monedas,20,self.y-150)
-        moneda2 = Item(diccionario_monedas,50,self.y-150)
-        moneda3 = Item(diccionario_monedas,80,self.y-150)
-        moneda4 = Item(diccionario_monedas,self.x-345,self.y-250)
-        moneda5 = Item(diccionario_monedas,self.x-580,self.y-400)
-        moneda6 = Item(diccionario_monedas,self.x-550,self.y-435)
-        moneda7 = Item(diccionario_monedas,self.x-520,self.y-470)
-        moneda8 = Item(diccionario_monedas,self.x-640,self.y-150)
-        moneda9 = Item(diccionario_monedas,self.x-670,self.y-150)
-        moneda10 = Item(diccionario_monedas,self.x-700,self.y-150)
-        moneda11 = Item(diccionario_monedas,self.x-730,self.y-150)
-        moneda12 = Item(diccionario_monedas,self.x-300,self.y-470)
-        self.lista_monedas = [moneda1,moneda2,moneda3,moneda4,moneda5,moneda6,moneda7,moneda8,moneda9,moneda10,moneda11,moneda12]
+        moneda1 = Item(diccionario_monedas,750,self.y-150)
+        moneda2 = Item(diccionario_monedas,790,self.y-150)
+        moneda3 = Item(diccionario_monedas,830,self.y-150)
+
+        moneda4 = Item(diccionario_monedas,self.x-85,self.y-250)
+
+        moneda5 = Item(diccionario_monedas,250,self.y-150)
+        moneda6 = Item(diccionario_monedas,280,self.y-150)
+        # moneda7 = Item(diccionario_monedas,self.x-520,self.y-150)
+
+        moneda8 = Item(diccionario_monedas,self.x-800,self.y-350)
+        moneda9 = Item(diccionario_monedas,self.x-830,self.y-350)
+
+        moneda10 = Item(diccionario_monedas,self.x-500,self.y-350)
+        moneda11 = Item(diccionario_monedas,self.x-530,self.y-350)
+        moneda12 = Item(diccionario_monedas,self.x-560,self.y-350)
+        self.lista_monedas = [moneda1,moneda2,moneda3,moneda4,moneda5,moneda6,moneda8,moneda9,moneda10,moneda11,moneda12]
     
     def set_puerta(self):
         reescalar_imagenes(diccionario_puertas, 160,195)
-        puerta = Puerta(diccionario_puertas,1050,self.y-265)
+        puerta = Puerta(diccionario_puertas,30,self.y-255)
         self.puerta = puerta
 
 
@@ -187,25 +192,21 @@ class Game_2(Config):
 
     
     def crear_bomba(self):
-        tiempo_actual_bomba = py.time.get_ticks() / 1000  # Obtiene el tiempo actual en segundos
-        tiempo_transcurrido_bomba = tiempo_actual_bomba - self.tiempo_ultimo_bomba
+        tiempo_actual_shuriken = py.time.get_ticks() / 1000  # Obtiene el tiempo actual en segundos
+        tiempo_transcurrido_shuriken = tiempo_actual_shuriken - self.tiempo_ultimo_bomba
 
-        if tiempo_transcurrido_bomba >= self.intervalo_bomba:
+        if tiempo_transcurrido_shuriken >= self.intervalo_shuriken:
             posicion_x = random.randrange(0, self.x)
             posicion_y = random.randrange(-100, -40)
-            bomba = Bomba(diccionario_animaciones_bomba, posicion_x, posicion_y)
-            self.lista_bombas.append(bomba)
-            self.tiempo_ultimo_bomba = tiempo_actual_bomba
+            bomba = Bomba(diccionario_animaciones_shuriken, posicion_x, posicion_y,50,50)
+            self.lista_shurikens.append(bomba)
+            self.tiempo_ultimo_bomba = tiempo_actual_shuriken
 
     def enemigo_apuñalar(self,enemigo):
         if enemigo.esta_muerto == False and enemigo.rectangulo_principal.colliderect(self.heroe.smaller_rect):
             tiempo_actual = time.time()
             tiempo_transcurrido = tiempo_actual - self.tiempo_ultima_apuñalada
             if tiempo_transcurrido >= self.intervalo_apuñalada:
-                # bala = Bala(diccionario_animaciones_bala,self.heroe.rectangulo_principal.x,self.enemigo.rectangulo_principal.x,self.enemigo.rectangulo_principal.y + 50)
-                # if bala.direccion_x >= self.enemigo.rectangulo_principal.x:
-                #         bala.rectangulo_principal.x += 120
-                # self.lista_balas_enemigo.append(bala)
                 sonido_espada.play()
                 self.heroe.vida -= 1
                 self.tiempo_ultima_apuñalada = tiempo_actual
@@ -217,7 +218,7 @@ class Game_2(Config):
                 if event.type == QUIT:
                     self.running = False
                 elif event.type == MOUSEBUTTONDOWN:
-                    self.heroe.disparar(diccionario_animaciones_bala,event.pos[0],self.lista_balas_heroe)
+                    self.heroe.disparar(diccionario_animaciones_bala,event.pos[0],self.lista_balas_heroe,12,7)
                     self.disparo = True
                 elif event.type == KEYDOWN:
                     if event.key == K_TAB:
@@ -228,19 +229,19 @@ class Game_2(Config):
                 plataforma.blit(self.screen)
         self.bajar_vida()
         self.heroe.actualizar(self.screen, self.plataformas)
-        # Item.actualizar_items(self.lista_llave,self.screen)
-        # Item.actualizar_items(self.lista_monedas,self.screen)
-        # self.heroe.agarrar_llave(self.lista_llave,self.puerta,self.enemigo)
-        # self.heroe.agarrar_monedas(self.lista_monedas)
-        # Bomba.actualizar_bomba(self.lista_bombas,self.screen,self.y)
-        self.heroe.colisionar_bombas(self.lista_bombas,diccionario_animaciones_bomba,self.screen)
+        Item.actualizar_items(self.lista_llave,self.screen)
+        Item.actualizar_items(self.lista_monedas,self.screen)
+        self.heroe.agarrar_llave(self.lista_llave,self.puerta,self.lista_enemigos)
+        self.heroe.agarrar_monedas(self.lista_monedas)
+        Bomba.actualizar_bomba(self.lista_shurikens,self.screen,self.y)
+        self.heroe.colisionar_bombas(self.lista_shurikens,diccionario_animaciones_shuriken,self.screen,sonido_espada)
         self.enemigo.actualizar(self.screen,self.heroe)
         self.enemigo_2.actualizar(self.screen,self.heroe)
 
         if self.disparo == True:
             Bala.actualizar_balas(self.lista_balas_heroe,self.screen,self.x)
-        Enemigo.verificar_muerte(self.enemigo,diccionario_animaciones_enemigo,self.screen,self.heroe,self.lista_balas_heroe)
-        Enemigo.verificar_muerte(self.enemigo_2,diccionario_animaciones_enemigo,self.screen,self.heroe,self.lista_balas_heroe)
+        Enemigo.verificar_muerte(self.enemigo,diccionario_animaciones_enemigo,self.screen,self.heroe,self.lista_balas_heroe, self.lista_enemigos,sonido_bomba)
+        Enemigo.verificar_muerte(self.enemigo_2,diccionario_animaciones_enemigo,self.screen,self.heroe,self.lista_balas_heroe,self.lista_enemigos,sonido_bomba)
             
         self.enemigo_apuñalar(self.enemigo)
         self.enemigo_apuñalar(self.enemigo_2)
@@ -253,9 +254,9 @@ class Game_2(Config):
 
             py.draw.rect(self.screen, "red", self.enemigo.rectangulo_principal,3)
             py.draw.rect(self.screen, "red", self.enemigo_2.rectangulo_principal,3)
-            # py.draw.rect(self.screen, "red", self.puerta.rectangulo_principal,3)
+            py.draw.rect(self.screen, "red", self.puerta.rectangulo_principal,3)
 
-            for bombas in self.lista_bombas:
+            for bombas in self.lista_shurikens:
                 py.draw.rect(self.screen, "red",bombas.rectangulo_principal,3)
 
             for plataforma in self.plataformas:
@@ -268,12 +269,12 @@ class Game_2(Config):
             self.manejar_eventos()
             self.move_heroe()
             self.fill_screen()
-            # self.crear_bomba()
-            # self.puerta.animar(self.screen)
+            self.crear_bomba()
+            self.puerta.animar(self.screen)
             self.actualizar_elementos()
             self.dibujar_rectangulos()
             self.actualizar_score()
-            # self.bajar_timer()
+            self.bajar_timer()
             self.verificar_fin_juego()
             py.display.update()
             py.display.flip()

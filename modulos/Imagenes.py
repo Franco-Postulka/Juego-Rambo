@@ -27,7 +27,7 @@ personaje_mirando_derecha = "rambo_quieto.png"
 
 fondo = os.path.join(base_path,fondo_filename)
 fondo_level_2 = os.path.join(base_path,"fondo_street_fighter.jpg")
-# fondo_level_2 = os.path.join(base_path,"fondo_chino_opaco.jpg")
+fondo_level_3 = os.path.join(base_path,"castillo.jpg")
 
 fondo_menu = os.path.join(base_path,"Inicio.jpg")
 letra = os.path.join("recursos_rambo","letra.ttf")
@@ -38,6 +38,8 @@ plataforma_2 = os.path.join(base_path,plataforma_2_filename)
 plataforma_3 = os.path.join(base_path,plataforma_3_filename)
 
 plataforma_base = os.path.join(base_path,"plataforma.png")
+plataforma_hielo = os.path.join(base_path,"platafroma_hielo.png")
+
 barril = os.path.join(base_path,"barril.png")
 personaje_quieto = [py.image.load(os.path.join(base_path,personaje_quieto_filename))]
 personaje_mirando_derecha = [py.image.load(os.path.join(base_path,personaje_quieto_filename))]
@@ -74,20 +76,46 @@ ninja_camina = [py.image.load(os.path.join(base_path, "ninja1.png")),
                 py.image.load(os.path.join(base_path, "ninja4.png")),
                 py.image.load(os.path.join(base_path, "ninja5.png")),
                 py.image.load(os.path.join(base_path, "ninja6.png")),]
-
-ninja_camina_derecha = ninja_camina 
-ninja_camina_izquierda = rotar_imagen(ninja_camina_derecha) 
-
-
 enemigo_muerte = [py.image.load(os.path.join(base_path, "explosion1.png")),
                     py.image.load(os.path.join(base_path, "explosion2.png")),
                     py.image.load(os.path.join(base_path, "explosion3.png")),
                     py.image.load(os.path.join(base_path, "explosion4.png")),
                     py.image.load(os.path.join(base_path, "explosion5.png")),]
 
+ninja_camina_derecha = ninja_camina 
+ninja_camina_izquierda = rotar_imagen(ninja_camina_derecha) 
+
+mago_camina = [py.image.load(os.path.join(base_path, "wizard1.png")),
+                py.image.load(os.path.join(base_path, "wizard2.png")),
+                py.image.load(os.path.join(base_path, "wizard3.png")),
+                py.image.load(os.path.join(base_path, "wizard4.png")),
+                py.image.load(os.path.join(base_path, "wizard5.png")),
+                py.image.load(os.path.join(base_path, "wizard6.png")),
+                py.image.load(os.path.join(base_path, "wizard7.png")),
+                py.image.load(os.path.join(base_path, "wizard8.png")),]
+
+mago_dispara = [py.image.load(os.path.join(base_path, "wizard_dispara1.png")),
+                py.image.load(os.path.join(base_path, "wizard_dispara2.png")),
+                py.image.load(os.path.join(base_path, "wizard_dispara3.png")),
+                py.image.load(os.path.join(base_path, "wizard_dispara4.png")),
+                py.image.load(os.path.join(base_path, "wizard_dispara5.png")),
+                py.image.load(os.path.join(base_path, "wizard_dispara6.png")),
+                py.image.load(os.path.join(base_path, "wizard_dispara7.png"))]
+
+mago_dispara_izquierda = rotar_imagen(mago_dispara)
+mago_dispara_derecha = rotar_imagen(mago_dispara_izquierda)
+mago_camina_derecha = mago_camina
+mago_camina_izquierda = rotar_imagen(mago_camina_derecha)
+
+
+
 bala = [py.image.load(os.path.join(base_path, "bala.png"))]
 bala_derecha = [py.image.load(os.path.join(base_path, "bala.png"))]
 bala_izquierda = rotar_imagen(bala_derecha)
+
+hielo = [py.image.load(os.path.join(base_path, "hielo.png"))]
+hielo_derecha = hielo
+hielo_izquierda = rotar_imagen(hielo_derecha)
 
 bomba = [py.image.load(os.path.join(base_path, "bomba.png"))]
 bomba_explosion = [py.image.load(os.path.join(base_path, "explosion1.png")),
@@ -120,4 +148,18 @@ barra_vida = [py.image.load(os.path.join(base_path, "barra5.png")),
                 py.image.load(os.path.join(base_path, "barra3.png")),
                 py.image.load(os.path.join(base_path, "barra2.png")),
                 py.image.load(os.path.join(base_path, "barra1.png"))]
+
+shruriken = [py.image.load(os.path.join(base_path, "shuriken1.png")),
+                py.image.load(os.path.join(base_path, "shuriken2.png"))]
+
+
+bomba_hielo = [py.image.load(os.path.join(base_path, "hielo_falling.png"))]
+hielo_explosion = [py.image.load(os.path.join(base_path, "explosion_hielo1.png")),
+                    py.image.load(os.path.join(base_path, "explosion_hielo2.png")),
+                    py.image.load(os.path.join(base_path, "explosion_hielo3.png")),
+                    py.image.load(os.path.join(base_path, "explosion_hielo4.png")),
+                    py.image.load(os.path.join(base_path, "explosion_hielo5.png")),
+                    py.image.load(os.path.join(base_path, "explosion_hielo6.png")),
+                    py.image.load(os.path.join(base_path, "explosion_hielo7.png")),
+                    py.image.load(os.path.join(base_path, "explosion_hielo8.png")),]
 

@@ -152,6 +152,7 @@ class Game(Config):
 
     def set_enemigo(self):
         self.enemigo =  Enemigo(diccionario_animaciones_enemigo,100,0.35,(120,150),900,470,5,0,self.x)
+        self.lista_enemigos = [self.enemigo]
 
     def set_heroe(self):
         reescalar_imagenes(diccionario_rambo, 120,150)
@@ -187,7 +188,7 @@ class Game(Config):
         if tiempo_transcurrido_bomba >= self.intervalo_bomba:
             posicion_x = random.randrange(0, self.x)
             posicion_y = random.randrange(-100, -40)
-            bomba = Bomba(diccionario_animaciones_bomba, posicion_x, posicion_y)
+            bomba = Bomba(diccionario_animaciones_bomba, posicion_x, posicion_y,75,75)
             self.lista_bombas.append(bomba)
             self.tiempo_ultimo_bomba = tiempo_actual_bomba
 
@@ -196,7 +197,7 @@ class Game(Config):
             tiempo_actual = time.time()
             tiempo_transcurrido = tiempo_actual - self.tiempo_ultimo_disparo
             if tiempo_transcurrido >= self.intervalo_disparo:
-                bala = Bala(diccionario_animaciones_bala,self.heroe.rectangulo_principal.x,self.enemigo.rectangulo_principal.x,self.enemigo.rectangulo_principal.y + 50)
+                bala = Bala(diccionario_animaciones_bala,self.heroe.rectangulo_principal.x,self.enemigo.rectangulo_principal.x,self.enemigo.rectangulo_principal.y + 50,12,7)
                 if bala.direccion_x >= self.enemigo.rectangulo_principal.x:
                         bala.rectangulo_principal.x += 120
                 self.lista_balas_enemigo.append(bala)
@@ -208,7 +209,7 @@ class Game(Config):
                 if event.type == QUIT:
                     self.running = False
                 elif event.type == MOUSEBUTTONDOWN:
-                    self.heroe.disparar(diccionario_animaciones_bala,event.pos[0],self.lista_balas_heroe)
+                    self.heroe.disparar(diccionario_animaciones_bala,event.pos[0],self.lista_balas_heroe,12,7)
                     self.disparo = True
                 elif event.type == KEYDOWN:
                     if event.key == K_TAB:
@@ -221,19 +222,19 @@ class Game(Config):
         self.heroe.actualizar(self.screen, self.plataformas)
         Item.actualizar_items(self.lista_llave,self.screen)
         Item.actualizar_items(self.lista_monedas,self.screen)
-        self.heroe.agarrar_llave(self.lista_llave,self.puerta,self.enemigo)
+        self.heroe.agarrar_llave(self.lista_llave,self.puerta,self.lista_enemigos)
         self.heroe.agarrar_monedas(self.lista_monedas)
         Bomba.actualizar_bomba(self.lista_bombas,self.screen,self.y)
-        self.heroe.colisionar_bombas(self.lista_bombas,diccionario_animaciones_bomba,self.screen)
+        self.heroe.colisionar_bombas(self.lista_bombas,diccionario_animaciones_bomba,self.screen,sonido_bomba)
         self.enemigo.actualizar(self.screen,self.heroe, sonido_visto)
 
         if self.disparo == True:
             Bala.actualizar_balas(self.lista_balas_heroe,self.screen,self.x)
-            Enemigo.verificar_muerte(self.enemigo,diccionario_animaciones_enemigo,self.screen,self.heroe,self.lista_balas_heroe)
+            Enemigo.verificar_muerte(self.enemigo,diccionario_animaciones_enemigo,self.screen,self.heroe,self.lista_balas_heroe,self.lista_enemigos,sonido_bomba)
         
         self.crear_bala_enemigo()
         Bala.actualizar_balas(self.lista_balas_enemigo,self.screen,self.x)
-        self.heroe.colisionar_balas(self.lista_balas_enemigo)
+        self.heroe.colisionar_balas(self.lista_balas_enemigo,sonido_recibo_disparo)
             
     def dibujar_rectangulos(self):
         if obtener_modo():

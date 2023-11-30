@@ -21,7 +21,15 @@ diccionario_monedas["inicial"] = moneda
 
 diccionario_animaciones_enemigo = {"inicial": enemigo_camina_izquierda,"derecha":enemigo_camina_derecha,"muerte":enemigo_muerte}
 diccionario_animaciones_ninja = {"inicial": ninja_camina_izquierda,"derecha":ninja_camina_derecha,"muerte":enemigo_muerte}
+diccionario_animaciones_mago = {"inicial": mago_camina_izquierda,"derecha":mago_camina_derecha,"muerte":bomba_explosion, "dispara izquierda": mago_dispara_izquierda, "dispara derecha": mago_dispara_derecha}
 
 
 diccionario_animaciones_bala = { "inicial": bala_izquierda,"derecha": bala_derecha }
 diccionario_animaciones_bomba = {"inicial": bomba, "explosion" : bomba_explosion}
+
+diccionario_animaciones_shuriken = {"inicial": shruriken, "explosion" : shruriken}
+
+diccionario_animaciones_bomba_hielo = {"inicial": bomba_hielo, "explosion" : hielo_explosion}
+
+diccionario_animaciones_hielo = { "inicial": hielo_izquierda,"derecha": hielo_derecha }
+

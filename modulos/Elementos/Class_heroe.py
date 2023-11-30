@@ -25,39 +25,45 @@ class Heroe(Personaje):
         self.limite_velocidad_salto = 15
         self.gravedad = 3
         self.esta_saltando =False
+        self.tiempo_inmovilizado = 0 
 
     def actualizar(self, pantalla, piso):
-        match self.que_hace:
-            case "Derecha":
-                if not self.esta_saltando:
+        if self.tiempo_inmovilizado > 0:
+            self.tiempo_inmovilizado -= 1
+            self.animacion_actual = self.animacion_actual
+            self.animar(pantalla)
+        else:
+            match self.que_hace:
+                case "Derecha":
+                    if not self.esta_saltando:
 
-                    self.animacion_actual  = self.animaciones["Derecha"]
-                    self.animaciones["inicial"] = self.animaciones['Mirando_derecha']
-                    self.animaciones["Salta"] = self.animaciones['Salta_derecha']
-                    self.animar(pantalla)
-                self.caminar(pantalla)
+                        self.animacion_actual  = self.animaciones["Derecha"]
+                        self.animaciones["inicial"] = self.animaciones['Mirando_derecha']
+                        self.animaciones["Salta"] = self.animaciones['Salta_derecha']
+                        self.animar(pantalla)
+                    self.caminar(pantalla)
 
-            case "Izquierda":
-                if not self.esta_saltando:
-                    self.animacion_actual  = self.animaciones["Izquierda"]
-                    self.animaciones["inicial"] = self.animaciones['Mirando_izquirda']
-                    self.animaciones["Salta"] = self.animaciones['Salta_izquierda']
-                    self.animar(pantalla)
-                self.caminar(pantalla)
+                case "Izquierda":
+                    if not self.esta_saltando:
+                        self.animacion_actual  = self.animaciones["Izquierda"]
+                        self.animaciones["inicial"] = self.animaciones['Mirando_izquirda']
+                        self.animaciones["Salta"] = self.animaciones['Salta_izquierda']
+                        self.animar(pantalla)
+                    self.caminar(pantalla)
 
-            case "inicial":
-                if not self.esta_saltando:
-                    self.animacion_actual  = self.animaciones["inicial"]
-                    self.animar(pantalla)
+                case "inicial":
+                    if not self.esta_saltando:
+                        self.animacion_actual  = self.animaciones["inicial"]
+                        self.animar(pantalla)
 
-            case "Salta":
-                if not self.esta_saltando:
-                    self.esta_saltando = True
-                    sonido_salto.play()
-                    self.desplazamiento_y = self.potencia_salto 
-                    self.animacion_actual  = self.animaciones["Salta"]
-                    self.animar(pantalla)
-        self.aplicar_gravedad(pantalla, piso)
+                case "Salta":
+                    if not self.esta_saltando:
+                        self.esta_saltando = True
+                        sonido_salto.play()
+                        self.desplazamiento_y = self.potencia_salto 
+                        self.animacion_actual  = self.animaciones["Salta"]
+                        self.animar(pantalla)
+            self.aplicar_gravedad(pantalla, piso)
 
 
     def caminar(self, pantalla):
@@ -92,20 +98,20 @@ class Heroe(Personaje):
         if not tocando_plataforma:
             self.esta_saltando = True
     
-    def disparar(self,diccionario_animaciones_bala,direccion_x,lista_balas_heroe):
+    def disparar(self,diccionario_animaciones_bala,direccion_x,lista_balas_heroe, ancho,alto):
         abscisa = self.rectangulo_principal.x
         ordenada = self.rectangulo_principal.y + 50
-        bala = Bala(diccionario_animaciones_bala,direccion_x,abscisa,ordenada)
+        bala = Bala(diccionario_animaciones_bala,direccion_x,abscisa,ordenada,ancho,alto)
         if bala.direccion_x >= abscisa:
             bala.rectangulo_principal.x += 120 
         lista_balas_heroe.append(bala)
         sonido_disparo.play()
 
-    def colisionar_bombas(self,lista_bombas,diccionario_animaciones_bomba,screen):
+    def colisionar_bombas(self,lista_bombas,diccionario_animaciones_bomba,screen,sonido):
         for i in range(len(lista_bombas)):
             if lista_bombas[i].rectangulo_principal.colliderect(self.rectangulo_principal):
                 sonido_recibo_disparo.play()
-                sonido_bomba.play()
+                sonido.play()
                 lista_bombas[i].velocidad_animacion = 0.05
                 lista_bombas[i].animacion_actual = diccionario_animaciones_bomba["explosion"]
                 lista_bombas[i].actualizar(screen)
@@ -113,22 +119,23 @@ class Heroe(Personaje):
                 self.vida -= 1
                 break
 
-    def colisionar_balas(self,lista_balas_enemigo):
+    def colisionar_balas(self,lista_balas_enemigo, sonido_extra = None):
         for i in range(len(lista_balas_enemigo)):
             if lista_balas_enemigo[i].rectangulo_principal.colliderect(self.rectangulo_principal):
-                sonido_recibo_disparo.play()
+                sonido_extra.play()
                 del lista_balas_enemigo[i]
                 self.vida -= 1
+                self.tiempo_inmovilizado = 18  # Establece el contador en 60 fotogramas (1 segundo a 60 FPS)
                 break
 
-    def agarrar_llave(self, lista_items,puerta,enemigo):
+    def agarrar_llave(self, lista_items,puerta,lista_enemigos):
         if len(lista_items) > 0:
             for i in range(len(lista_items)):
                 if lista_items[i].rectangulo_principal.colliderect(self.smaller_rect):
                     sonido_llave.play()
                     del lista_items[i]
                     break
-        elif len(lista_items) == 0  and enemigo.esta_muerto == True:
+        elif len(lista_items) == 0  and len(lista_enemigos)<=0:
             puerta.animacion_actual = puerta.animaciones["abierta"]  
             puerta.animacion_actual = puerta.animaciones["final"]
 
