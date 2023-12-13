@@ -20,6 +20,7 @@ import pygame as py
 import sqlite3
 from Niveles.game_2 import Game_2
 
+
 py.init()
 py.font.init()
 
@@ -74,8 +75,6 @@ class Game(Config):
 
     def verificar_fin_juego(self):
         if self.heroe.vida <= 0 :
-            # self.fin= True
-            # self.running = False
             self.music.stop()
             game = Game_2((1200, 680), 18)
             game.set_caption('Nivel 2')

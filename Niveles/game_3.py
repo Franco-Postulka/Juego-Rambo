@@ -19,6 +19,7 @@ from config import Config
 from config import Config
 import pygame as py
 import sqlite3
+from moviepy.editor import VideoFileClip
 
 py.init()
 py.font.init()
@@ -55,6 +56,7 @@ class Game_3(Config):
         self.tiempor_anterior = 0
         self.tiempo_nivel = 60
         self.fin = False
+        self.tiempo_ultima_apuñalada = 0
         # self.jugador = jugador
 
     def bajar_timer(self):
@@ -72,8 +74,14 @@ class Game_3(Config):
         rendered_text = self.font.render(f"Score: {self.score}", True, (255,255,255))
         self.screen.blit(rendered_text, (self.x-150,20))
 
+    def reproducir_video(self, video_path):
+        clip = VideoFileClip(video_path)
+        clip.preview()
+
     def verificar_fin_juego(self):
         if self.heroe.vida <= 0 :
+            self.music.stop()
+            self.reproducir_video("recursos_rambo\wasted.mp4")
             self.fin = True
             self.running = False
         elif self.puerta.animacion_actual == diccionario_puertas["final"] and self.puerta.rectangulo_principal.colliderect(self.heroe.smaller_rect):
