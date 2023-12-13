@@ -10,5 +10,9 @@ Este es un proyecto desarrollado como parte de las asignaturas Programación 1 y
 - Utiliza las teclas de A y D para mover a Rambo de derecha a izquierda respectivamente.
 - Tecla de salto: W
 - Tecla de disparo: click derecho del mouse
+
+## Gameplay
+
+Puedes ver el gameplay del juego en este [enlace a YouTube](https://youtu.be/TqFIhmIiUss?si=DDAgoZgdFp8J73dj).
   
 
