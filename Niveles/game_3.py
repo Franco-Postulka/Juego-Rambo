@@ -91,7 +91,7 @@ class Game_3(Config):
                 # Si ya se estableció el tiempo, verifica si han pasado 2 segundos
                 tiempo_transcurrido = time.time() - self.tiempo_finalizacion
                 if tiempo_transcurrido >= 2:  # Cambia este valor por el tiempo deseado
-                    self.guardar_db("score.db")
+                    # self.guardar_db("score.db")
                     self.fin = True
                     self.running = False
 
