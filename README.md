@@ -7,7 +7,7 @@ Este es un proyecto desarrollado como parte de las asignaturas Programación 1 y
 - Cada nivel tiene sus propios enemigos.
 ## Controles
 
-- Utiliza las teclas de A y D para mover a Rambo de derecha a izquierda respectivamente.
+- Utiliza las teclas de A y D para mover a Rambo de izquierda a derecha respectivamente.
 - Tecla de salto: W
 - Tecla de disparo: click derecho del mouse
 
